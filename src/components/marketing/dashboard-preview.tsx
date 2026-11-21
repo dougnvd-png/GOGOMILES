@@ -14,7 +14,7 @@ import { DonutChart } from '@/components/charts/donut-chart';
 import { Sparkline } from '@/components/charts/sparkline';
 import { MetricCard } from '@/components/dashboard/metric-card';
 import { Trend } from '@/components/dashboard/trend';
-import { ItemStatusBadge } from '@/components/items/item-status-badge';
+import { OfferStatusBadge } from '@/components/offers/offer-status-badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { appConfig } from '@/config/app';
 import { formatNumber } from '@/lib/format';
@@ -23,12 +23,13 @@ import {
   statusBreakdown,
   summarizePeriod,
 } from '@/lib/insights';
-import { createSampleItems, sampleReferenceDate } from '@/lib/sample-items';
+import { offerRoute } from '@/lib/offers';
+import { createSampleOffers, sampleReferenceDate } from '@/lib/sample-offers';
 
 const previewPeriod = 30;
 const flowSeries: ChartSeries[] = [
-  { key: 'created', label: 'Criados', color: chartColors.primary },
-  { key: 'done', label: 'Concluídos', color: chartColors.done },
+  { key: 'created', label: 'Cadastradas', color: chartColors.primary },
+  { key: 'done', label: 'Emitidas', color: chartColors.done },
 ];
 // Sem desfoque nos cards internos: desfoque aninhado em um elemento inclinado
 // falha em alguns navegadores.
@@ -38,20 +39,20 @@ const floatingStyle = { backgroundColor: 'var(--popover)' } as CSSProperties;
 
 const railIcons = [
   { name: 'overview', icon: LayoutDashboard },
-  { name: 'items', icon: ListChecks },
+  { name: 'offers', icon: ListChecks },
   { name: 'settings', icon: Settings },
 ];
 
 /**
  * Prévia do painel na página inicial. Usa os mesmos componentes da área logada
- * com os itens de exemplo, então acompanha qualquer mudança visual do painel.
+ * com as ofertas de exemplo, então acompanha qualquer mudança visual do painel.
  */
 export const DashboardPreview = () => {
-  const items = createSampleItems(sampleReferenceDate);
-  const summary = summarizePeriod(items, previewPeriod, sampleReferenceDate);
-  const series = buildDailySeries(items, previewPeriod, sampleReferenceDate);
-  const breakdown = statusBreakdown(items);
-  const latestDone = items.find((item) => item.status === 'done') ?? items[0];
+  const offers = createSampleOffers(sampleReferenceDate);
+  const summary = summarizePeriod(offers, previewPeriod, sampleReferenceDate);
+  const series = buildDailySeries(offers, previewPeriod, sampleReferenceDate);
+  const breakdown = statusBreakdown(offers);
+  const latestDone = offers.find((offer) => offer.status === 'done') ?? offers[0];
   const colors = {
     open: chartColors.open,
     in_progress: chartColors.progress,
@@ -93,7 +94,7 @@ export const DashboardPreview = () => {
           <div className="grid min-w-0 flex-1 gap-3">
             <div className="grid gap-3 sm:grid-cols-3">
               <MetricCard
-                label="Novos itens"
+                label="Ofertas cadastradas"
                 value={formatNumber(summary.current.created)}
                 icon={Sparkles}
                 detail={<Trend change={summary.createdChange} />}
@@ -102,7 +103,7 @@ export const DashboardPreview = () => {
                 }
               />
               <MetricCard
-                label="Concluídos"
+                label="Ofertas emitidas"
                 value={formatNumber(summary.current.done)}
                 icon={CircleCheck}
                 detail={<Trend change={summary.doneChange} />}
@@ -115,7 +116,7 @@ export const DashboardPreview = () => {
               />
               <div className="hidden sm:block">
                 <MetricCard
-                  label="Tempo médio para concluir"
+                  label="Tempo até emitir"
                   value={`${(summary.current.averageDaysToFinish ?? 0).toLocaleString('pt-BR')} dias`}
                   icon={Timer}
                   detail={
@@ -165,19 +166,19 @@ export const DashboardPreview = () => {
                     }))}
                   >
                     <p className="text-2xl leading-none font-semibold tabular-nums">
-                      {formatNumber(items.length)}
+                      {formatNumber(offers.length)}
                     </p>
                   </DonutChart>
                   <ul className="grid gap-2">
-                    {items.slice(0, 2).map((item) => (
+                    {offers.slice(0, 2).map((offer) => (
                       <li
-                        key={item.id}
+                        key={offer.id}
                         className="flex items-center justify-between gap-2"
                       >
                         <span className="truncate text-xs font-medium">
-                          {item.title}
+                          {offerRoute(offer)}
                         </span>
-                        <ItemStatusBadge status={item.status} />
+                        <OfferStatusBadge status={offer.status} />
                       </li>
                     ))}
                   </ul>
@@ -196,9 +197,9 @@ export const DashboardPreview = () => {
         </span>
         <div className="grid gap-0.5 text-left">
           <p className="max-w-40 truncate text-xs font-medium">
-            {latestDone.title}
+            {offerRoute(latestDone)}
           </p>
-          <p className="text-muted-foreground text-xs">Concluído agora</p>
+          <p className="text-muted-foreground text-xs">Oferta emitida</p>
         </div>
       </div>
       <div
@@ -206,7 +207,7 @@ export const DashboardPreview = () => {
         className="surface float-b absolute top-44 -right-10 z-10 hidden items-center gap-2.5 rounded-2xl p-3 pr-4 xl:flex"
       >
         <Trend change={summary.doneChange} />
-        <p className="text-xs font-medium">Concluídos no período</p>
+        <p className="text-xs font-medium">Emitidas no período</p>
       </div>
       <div className="from-background pointer-events-none absolute inset-x-0 -bottom-2 h-2/5 bg-gradient-to-t to-transparent" />
     </div>

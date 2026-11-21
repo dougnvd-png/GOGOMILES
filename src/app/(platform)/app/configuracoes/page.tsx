@@ -56,7 +56,7 @@ const services: Service[] = [
     icon: Database,
     connected: isDatabaseConfigured(),
     connectedText: 'Os dados ficam guardados no seu banco, no Supabase.',
-    pendingText: 'Os itens são de exemplo e somem ao reiniciar.',
+    pendingText: 'As ofertas são de exemplo e somem ao reiniciar.',
     request: 'Conecte o Supabase seguindo o README.',
   },
   {

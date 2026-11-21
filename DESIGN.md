@@ -10,12 +10,12 @@ Preencha esta seção ao montar o projeto e mantenha atualizada. Os quatro últi
 
 | Campo | Valor |
 | --- | --- |
-| Nome | Meu projeto |
-| Para quem é | A definir |
-| Tom de voz | Direto, próximo e sem jargão |
-| Cor | `#7c3aed` |
-| Estilo | Vidro (`glass`) |
-| Modo inicial | Escuro (`dark`) |
+| Nome | GO GO MILES |
+| Para quem é | Quem busca passagens aéreas baratas em milhas: o dono, a equipe e os clientes |
+| Tom de voz | Direto, próximo e moderno, sem jargão de milhagem |
+| Cor | `#0401d0` |
+| Estilo | Degradê (`gradient`) |
+| Modo inicial | Claro (`light`) |
 | Fonte | Moderna (`modern`) |
 
 A página `/app/design-system` mostra tudo isto funcionando: cores, tipografia, botões, selos, campos, superfícies, gráficos e estados. Ao criar um componente padrão novo, acrescente um exemplo lá no mesmo trabalho.

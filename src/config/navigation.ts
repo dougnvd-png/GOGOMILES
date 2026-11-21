@@ -1,6 +1,6 @@
 import {
   LayoutDashboard,
-  ListChecks,
+  Plane,
   Settings,
   type LucideIcon,
 } from 'lucide-react';
@@ -15,7 +15,7 @@ export const platformHome = '/app';
 
 export const mainNavigation: NavigationItem[] = [
   { title: 'Visão geral', href: '/app', icon: LayoutDashboard },
-  { title: 'Itens', href: '/app/itens', icon: ListChecks },
+  { title: 'Ofertas', href: '/app/ofertas', icon: Plane },
 ];
 
 export const secondaryNavigation: NavigationItem[] = [

@@ -18,7 +18,7 @@ import { Sparkline } from '@/components/charts/sparkline';
 import { MetricCard } from '@/components/dashboard/metric-card';
 import { Trend } from '@/components/dashboard/trend';
 import { EmptyState } from '@/components/empty-state';
-import { ItemStatusBadge } from '@/components/items/item-status-badge';
+import { OfferStatusBadge } from '@/components/offers/offer-status-badge';
 import { PageHeader } from '@/components/platform/page-header';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
@@ -46,7 +46,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { appConfig } from '@/config/app';
-import { itemStatuses } from '@/lib/items';
+import { offerStatuses } from '@/lib/offers';
 import {
   brandColor,
   themeFontLabels,
@@ -284,7 +284,7 @@ export default function DesignSystemPage() {
                 <Button size="lg">Grande</Button>
                 <Button>
                   <Plus aria-hidden />
-                  Novo item
+                  Nova oferta
                 </Button>
                 <Button size="icon" variant="outline" aria-label="Adicionar">
                   <Plus aria-hidden />
@@ -303,8 +303,8 @@ export default function DesignSystemPage() {
           <Card>
             <CardContent className="grid gap-5">
               <Sample label="Situações">
-                {itemStatuses.map((status) => (
-                  <ItemStatusBadge key={status} status={status} />
+                {offerStatuses.map((status) => (
+                  <OfferStatusBadge key={status} status={status} />
                 ))}
               </Sample>
               <Sample label="Selos">
@@ -461,7 +461,7 @@ export default function DesignSystemPage() {
                   <span className="text-3xl font-semibold tabular-nums">
                     {sampleTotal}
                   </span>
-                  <span className="text-muted-foreground text-xs">itens</span>
+                  <span className="text-muted-foreground text-xs">ofertas</span>
                 </DonutChart>
               </CardContent>
             </Card>
@@ -496,7 +496,7 @@ export default function DesignSystemPage() {
                 <Info aria-hidden />
                 <AlertTitle>Modo demonstração</AlertTitle>
                 <AlertDescription>
-                  Os itens são de exemplo e voltam ao reiniciar.
+                  As ofertas são de exemplo e voltam ao reiniciar.
                 </AlertDescription>
               </Alert>
               <Alert variant="destructive">
@@ -534,7 +534,7 @@ export default function DesignSystemPage() {
                   action={
                     <Button>
                       <Plus aria-hidden />
-                      Novo item
+                      Nova oferta
                     </Button>
                   }
                 />

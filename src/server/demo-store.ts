@@ -1,28 +1,28 @@
 import 'server-only';
 
-import type { CreateItemInput, Item, ItemStatus } from '@/lib/items';
-import { createSampleItems } from '@/lib/sample-items';
+import type { CreateOfferInput, Offer, OfferStatus } from '@/lib/offers';
+import { createSampleOffers } from '@/lib/sample-offers';
 
 const maxDemoItems = 500;
 
 const globalForDemo = globalThis as unknown as {
-  demoItemsByOwner?: Map<string, Item[]>;
+  demoItemsByOwner?: Map<string, Offer[]>;
 };
-const itemsByOwner = (globalForDemo.demoItemsByOwner ??= new Map<string, Item[]>());
+const itemsByOwner = (globalForDemo.demoItemsByOwner ??= new Map<string, Offer[]>());
 
 const ownerItems = (ownerId: string) => {
   const existing = itemsByOwner.get(ownerId);
   if (existing) {
     return existing;
   }
-  const created = createSampleItems(new Date());
+  const created = createSampleOffers(new Date());
   itemsByOwner.set(ownerId, created);
   return created;
 };
 
 export const demoStore = {
   list: (ownerId: string) => [...ownerItems(ownerId)],
-  create: (ownerId: string, input: CreateItemInput) => {
+  create: (ownerId: string, input: CreateOfferInput) => {
     const list = ownerItems(ownerId);
     // Sem login todos compartilham esta lista. O teto evita crescimento sem limite.
     if (list.length >= maxDemoItems) {
@@ -30,21 +30,19 @@ export const demoStore = {
     }
     list.unshift({
       id: crypto.randomUUID(),
-      title: input.title,
-      category: input.category,
-      dueDate: input.dueDate,
+      ...input,
       status: 'open',
-      completedAt: null,
+      issuedAt: null,
       createdAt: new Date().toISOString(),
     });
   },
-  updateStatus: (ownerId: string, id: string, status: ItemStatus) => {
-    const item = ownerItems(ownerId).find((entry) => entry.id === id);
-    if (!item) {
+  updateStatus: (ownerId: string, id: string, status: OfferStatus) => {
+    const offer = ownerItems(ownerId).find((entry) => entry.id === id);
+    if (!offer) {
       return false;
     }
-    item.status = status;
-    item.completedAt = status === 'done' ? new Date().toISOString() : null;
+    offer.status = status;
+    offer.issuedAt = status === 'done' ? new Date().toISOString() : null;
     return true;
   },
   remove: (ownerId: string, id: string) => {

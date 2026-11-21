@@ -1,6 +1,7 @@
 import {
   date,
   index,
+  integer,
   pgEnum,
   pgTable,
   text,
@@ -8,25 +9,32 @@ import {
   uuid,
 } from 'drizzle-orm/pg-core';
 
-import { itemStatuses } from '../../lib/items';
+import { offerStatuses } from '../../lib/offers';
 
-export const itemStatus = pgEnum('item_status', itemStatuses);
+export const offerStatus = pgEnum('offer_status', offerStatuses);
 
 // enableRLS sem policies fecha a Data API pública do Supabase para esta tabela.
 // A aplicação acessa pelo DATABASE_URL e filtra por ownerId em src/server.
-export const items = pgTable(
-  'items',
+export const offers = pgTable(
+  'offers',
   {
     id: uuid('id').primaryKey().defaultRandom(),
     ownerId: text('owner_id').notNull(),
-    title: text('title').notNull(),
-    status: itemStatus('status').notNull().default('open'),
-    category: text('category').notNull(),
-    dueDate: date('due_date'),
-    completedAt: timestamp('completed_at', { withTimezone: true }),
+    origin: text('origin').notNull(),
+    destination: text('destination').notNull(),
+    program: text('program').notNull(),
+    cabin: text('cabin').notNull(),
+    departDate: date('depart_date'),
+    returnDate: date('return_date'),
+    miles: integer('miles').notNull(),
+    taxesCents: integer('taxes_cents').notNull().default(0),
+    link: text('link'),
+    notes: text('notes'),
+    status: offerStatus('status').notNull().default('open'),
+    issuedAt: timestamp('issued_at', { withTimezone: true }),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
       .defaultNow(),
   },
-  (table) => [index('items_owner_id_idx').on(table.ownerId)],
+  (table) => [index('offers_owner_id_idx').on(table.ownerId)],
 ).enableRLS();

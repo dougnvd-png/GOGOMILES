@@ -8,16 +8,17 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { describeDeadline, upcomingDeadlines } from '@/lib/insights';
+import { offerRoute } from '@/lib/offers';
 import { cn } from '@/lib/utils';
-import { listItems } from '@/server/queries/items';
+import { listOffers } from '@/server/queries/offers';
 
 const warningWindowDays = 3;
 const visibleLimit = 5;
 
-/** Avisos do cabeçalho: itens pendentes com prazo vencido ou perto de vencer. */
+/** Avisos do cabeçalho: ofertas em aberto com embarque próximo ou data já passada. */
 export const NotificationsMenu = async () => {
-  const items = await listItems();
-  const alerts = upcomingDeadlines(items, new Date(), items.length).filter(
+  const offers = await listOffers();
+  const alerts = upcomingDeadlines(offers, new Date(), offers.length).filter(
     ({ daysLeft }) => daysLeft <= warningWindowDays,
   );
   const visible = alerts.slice(0, visibleLimit);
@@ -31,8 +32,8 @@ export const NotificationsMenu = async () => {
           className="relative"
           aria-label={
             alerts.length > 0
-              ? `Avisos: ${alerts.length} prazos pedem atenção`
-              : 'Avisos: nenhum prazo próximo'
+              ? `Avisos: ${alerts.length} ${alerts.length === 1 ? "embarque pede" : "embarques pedem"} atenção`
+              : 'Avisos: nenhum embarque próximo'
           }
         >
           <Bell />
@@ -48,19 +49,19 @@ export const NotificationsMenu = async () => {
         <div className="border-b px-4 py-3">
           <p className="text-sm font-semibold">Avisos</p>
           <p className="text-muted-foreground text-xs">
-            Prazos vencidos ou que vencem em até {warningWindowDays} dias.
+            Embarques que já passaram ou que acontecem em até {warningWindowDays} dias.
           </p>
         </div>
         {visible.length === 0 ? (
           <p className="text-muted-foreground px-4 py-6 text-center text-sm">
-            Nenhum prazo próximo. Tudo em dia.
+            Nenhum embarque próximo. Tudo em dia.
           </p>
         ) : (
           <ul className="grid gap-0.5 p-2">
-            {visible.map(({ item, daysLeft }) => (
+            {visible.map(({ offer, daysLeft }) => (
               <li
-                key={item.id}
-                className="flex items-start gap-3 rounded-lg px-2 py-2"
+                key={offer.id}
+                className="flex offers-start gap-3 rounded-lg px-2 py-2"
               >
                 <span
                   aria-hidden
@@ -71,7 +72,7 @@ export const NotificationsMenu = async () => {
                 />
                 <span className="grid min-w-0 gap-0.5">
                   <span className="truncate text-sm font-medium">
-                    {item.title}
+                    {offerRoute(offer)}
                   </span>
                   <span className="text-muted-foreground text-xs">
                     {describeDeadline(daysLeft)}
@@ -83,10 +84,10 @@ export const NotificationsMenu = async () => {
         )}
         <div className="border-t p-2">
           <Button asChild variant="ghost" size="sm" className="w-full">
-            <Link href="/app/itens">
+            <Link href="/app/ofertas">
               {alerts.length > visible.length
-                ? `Ver os ${alerts.length} na lista de itens`
-                : 'Abrir a lista de itens'}
+                ? `Ver os ${alerts.length} na lista de ofertas`
+                : 'Abrir a lista de ofertas'}
             </Link>
           </Button>
         </div>

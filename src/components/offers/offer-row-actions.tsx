@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { MoreHorizontal, Trash2 } from 'lucide-react';
+import { ExternalLink, MoreHorizontal, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import {
@@ -26,15 +26,16 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
-  itemStatusLabels,
-  itemStatuses,
-  type Item,
-  type ItemStatus,
-} from '@/lib/items';
+  offerRoute,
+  offerStatusLabels,
+  offerStatuses,
+  type Offer,
+  type OfferStatus,
+} from '@/lib/offers';
 import type { ActionResult } from '@/lib/result';
-import { deleteItem, updateItemStatus } from '@/server/actions/items';
+import { deleteOffer, updateOfferStatus } from '@/server/actions/offers';
 
-export const ItemRowActions = ({ item }: { item: Item }) => {
+export const OfferRowActions = ({ offer }: { offer: Offer }) => {
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -50,11 +51,13 @@ export const ItemRowActions = ({ item }: { item: Item }) => {
   };
 
   const handleStatusChange = (status: string) => {
-    run(() => updateItemStatus({ id: item.id, status: status as ItemStatus }));
+    run(() =>
+      updateOfferStatus({ id: offer.id, status: status as OfferStatus }),
+    );
   };
 
   const handleDelete = () => {
-    run(() => deleteItem({ id: item.id }));
+    run(() => deleteOffer({ id: offer.id }));
   };
 
   return (
@@ -65,24 +68,32 @@ export const ItemRowActions = ({ item }: { item: Item }) => {
             variant="ghost"
             size="icon-sm"
             disabled={isPending}
-            aria-label={`Ações de ${item.title}`}
+            aria-label={`Ações da oferta ${offerRoute(offer)}`}
           >
             <MoreHorizontal />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-48">
+        <DropdownMenuContent align="end" className="w-52">
           <DropdownMenuLabel>Situação</DropdownMenuLabel>
           <DropdownMenuRadioGroup
-            value={item.status}
+            value={offer.status}
             onValueChange={handleStatusChange}
           >
-            {itemStatuses.map((status) => (
+            {offerStatuses.map((status) => (
               <DropdownMenuRadioItem key={status} value={status}>
-                {itemStatusLabels[status]}
+                {offerStatusLabels[status]}
               </DropdownMenuRadioItem>
             ))}
           </DropdownMenuRadioGroup>
           <DropdownMenuSeparator />
+          {offer.link && (
+            <DropdownMenuItem asChild>
+              <a href={offer.link} target="_blank" rel="noopener noreferrer">
+                <ExternalLink />
+                Abrir no site
+              </a>
+            </DropdownMenuItem>
+          )}
           <DropdownMenuItem
             variant="destructive"
             onSelect={() => {
@@ -97,9 +108,10 @@ export const ItemRowActions = ({ item }: { item: Item }) => {
       <AlertDialog open={confirmingDelete} onOpenChange={setConfirmingDelete}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Excluir este item?</AlertDialogTitle>
+            <AlertDialogTitle>Excluir esta oferta?</AlertDialogTitle>
             <AlertDialogDescription>
-              “{item.title}” será apagado e não poderá ser recuperado.
+              A oferta {offerRoute(offer)} será apagada e não poderá ser
+              recuperada.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

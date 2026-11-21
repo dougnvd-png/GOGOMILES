@@ -15,13 +15,13 @@ interface AppConfig {
 }
 
 export const appConfig: AppConfig = {
-  name: 'Meu projeto',
-  tagline: 'Organize o trabalho do dia a dia em um só lugar.',
+  name: 'GO GO MILES',
+  tagline: 'Encontre voos baratos em milhas antes que a oportunidade acabe.',
   contactEmail: '',
   theme: {
-    color: '#7c3aed',
-    style: 'glass',
-    mode: 'dark',
+    color: '#0401d0',
+    style: 'gradient',
+    mode: 'light',
     font: 'modern',
   },
 };

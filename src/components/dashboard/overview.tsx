@@ -26,8 +26,8 @@ import { Sparkline } from '@/components/charts/sparkline';
 import { MetricCard } from '@/components/dashboard/metric-card';
 import { Trend } from '@/components/dashboard/trend';
 import { EmptyState } from '@/components/empty-state';
-import { ItemStatusBadge } from '@/components/items/item-status-badge';
-import { NewItemDialog } from '@/components/items/new-item-dialog';
+import { OfferStatusBadge } from '@/components/offers/offer-status-badge';
+import { NewOfferDialog } from '@/components/offers/new-offer-dialog';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -39,32 +39,37 @@ import {
 } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { formatDate, formatLongDate, formatNumber } from '@/lib/format';
+import { formatLongDate, formatNumber } from '@/lib/format';
 import {
   buildDailySeries,
   describeDeadline,
   greetingFor,
   overdueCount,
-  pendingItems,
+  pendingOffers,
   periodOptions,
+  programBreakdown,
   statusBreakdown,
   summarizePeriod,
   upcomingDeadlines,
-  weekdayBreakdown,
   type PeriodDays,
 } from '@/lib/insights';
-import type { Item, ItemStatus } from '@/lib/items';
+import {
+  formatMiles,
+  offerRoute,
+  type Offer,
+  type OfferStatus,
+} from '@/lib/offers';
 import { cn } from '@/lib/utils';
 
-const statusColors: Record<ItemStatus, string> = {
+const statusColors: Record<OfferStatus, string> = {
   open: chartColors.open,
   in_progress: chartColors.progress,
   done: chartColors.done,
 };
 
 const flowSeries: ChartSeries[] = [
-  { key: 'created', label: 'Criados', color: chartColors.primary },
-  { key: 'done', label: 'Concluídos', color: chartColors.done },
+  { key: 'created', label: 'Cadastradas', color: chartColors.primary },
+  { key: 'done', label: 'Emitidas', color: chartColors.done },
 ];
 
 const formatDays = (days: number | null) => {
@@ -76,9 +81,9 @@ const formatDays = (days: number | null) => {
 
 const shortcuts = [
   {
-    title: 'Ver todos os itens',
-    description: 'Busque, filtre e ordene a lista completa.',
-    href: '/app/itens',
+    title: 'Ver todas as ofertas',
+    description: 'Busque por rota, programa e cabine.',
+    href: '/app/ofertas',
     icon: ListChecks,
   },
   {
@@ -91,45 +96,45 @@ const shortcuts = [
 
 const describePending = (pending: number, overdue: number) => {
   if (pending === 0) {
-    return 'Nenhum item pendente no momento.';
+    return 'Nenhuma oferta pendente no momento.';
   }
-  const total = `${formatNumber(pending)} ${pending === 1 ? 'item pendente' : 'itens pendentes'}`;
+  const total = `${formatNumber(pending)} ${pending === 1 ? 'oferta pendente' : 'ofertas pendentes'}`;
   return overdue > 0
-    ? `${total}, ${formatNumber(overdue)} com prazo vencido.`
-    : `${total}, nenhum com prazo vencido.`;
+    ? `${total}, ${formatNumber(overdue)} com a data de embarque já passada.`
+    : `${total}, nenhuma com a data de embarque já passada.`;
 };
 
 interface OverviewProps {
-  items: Item[];
+  offers: Offer[];
   /** Primeiro nome de quem está logado. Vazio no modo demonstração. */
   firstName: string;
   /** Momento da renderização no servidor, para o navegador calcular o mesmo resultado. */
   now: string;
 }
 
-export const Overview = ({ items, firstName, now }: OverviewProps) => {
+export const Overview = ({ offers, firstName, now }: OverviewProps) => {
   const [period, setPeriod] = useState<PeriodDays>(30);
   const today = useMemo(() => new Date(now), [now]);
 
   const summary = useMemo(
-    () => summarizePeriod(items, period, today),
-    [items, period, today],
+    () => summarizePeriod(offers, period, today),
+    [offers, period, today],
   );
   const series = useMemo(
-    () => buildDailySeries(items, period, today),
-    [items, period, today],
+    () => buildDailySeries(offers, period, today),
+    [offers, period, today],
   );
-  const weekdays = useMemo(
-    () => weekdayBreakdown(items, period, today),
-    [items, period, today],
+  const programs = useMemo(
+    () => programBreakdown(offers, period, today),
+    [offers, period, today],
   );
-  const breakdown = useMemo(() => statusBreakdown(items), [items]);
+  const breakdown = useMemo(() => statusBreakdown(offers), [offers]);
   const deadlines = useMemo(
-    () => upcomingDeadlines(items, today, 5),
-    [items, today],
+    () => upcomingDeadlines(offers, today, 5),
+    [offers, today],
   );
-  const pending = pendingItems(items).length;
-  const overdue = overdueCount(items, today);
+  const pending = pendingOffers(offers).length;
+  const overdue = overdueCount(offers, today);
   const comparison = `vs. ${period} dias anteriores`;
   const flowRate = summary.current.created
     ? Math.min(100, (summary.current.done / summary.current.created) * 100)
@@ -166,13 +171,13 @@ export const Overview = ({ items, firstName, now }: OverviewProps) => {
               ))}
             </TabsList>
           </Tabs>
-          <NewItemDialog />
+          <NewOfferDialog />
         </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard
-          label="Novos itens"
+          label="Ofertas cadastradas"
           value={formatNumber(summary.current.created)}
           icon={Sparkles}
           detail={
@@ -184,7 +189,7 @@ export const Overview = ({ items, firstName, now }: OverviewProps) => {
           visual={<Sparkline values={series.map((point) => point.created)} />}
         />
         <MetricCard
-          label="Concluídos"
+          label="Ofertas emitidas"
           value={formatNumber(summary.current.done)}
           icon={CircleCheck}
           detail={
@@ -201,7 +206,7 @@ export const Overview = ({ items, firstName, now }: OverviewProps) => {
           }
         />
         <MetricCard
-          label="Tempo médio para concluir"
+          label="Tempo até emitir"
           value={formatDays(summary.current.averageDaysToFinish)}
           icon={Timer}
           detail={
@@ -213,28 +218,28 @@ export const Overview = ({ items, firstName, now }: OverviewProps) => {
           visual={
             <Progress
               value={flowRate}
-              aria-label="Itens concluídos em relação aos criados no período"
+              aria-label="Ofertas emitidas em relação às cadastradas no período"
               className="h-1.5"
             />
           }
         />
         <MetricCard
-          label="Pendentes agora"
+          label="Ofertas em aberto"
           value={formatNumber(pending)}
           icon={Inbox}
           detail={
             overdue > 0 ? (
               <span className="text-destructive font-medium">
-                {formatNumber(overdue)} com prazo vencido
+                {formatNumber(overdue)} com embarque já passado
               </span>
             ) : (
-              'Nenhum prazo vencido'
+              'Nenhum embarque passado'
             )
           }
           visual={
             <Progress
-              value={items.length ? (pending / items.length) * 100 : 0}
-              aria-label="Parte dos itens que ainda está pendente"
+              value={offers.length ? (pending / offers.length) * 100 : 0}
+              aria-label="Parte das ofertas que ainda está em aberto"
               className="h-1.5"
             />
           }
@@ -246,7 +251,7 @@ export const Overview = ({ items, firstName, now }: OverviewProps) => {
           <CardHeader>
             <CardTitle>Movimento</CardTitle>
             <CardDescription>
-              Itens criados e concluídos por dia, nos últimos {period} dias.
+              Ofertas cadastradas e emitidas por dia, nos últimos {period} dias.
             </CardDescription>
             <CardAction>
               <ChartLegend series={flowSeries} />
@@ -267,7 +272,7 @@ export const Overview = ({ items, firstName, now }: OverviewProps) => {
         <Card className="gap-4 lg:col-span-4">
           <CardHeader>
             <CardTitle>Situação</CardTitle>
-            <CardDescription>Todos os itens, por situação.</CardDescription>
+            <CardDescription>Todas as ofertas, por situação.</CardDescription>
           </CardHeader>
           <CardContent className="grid gap-5">
             <DonutChart
@@ -279,9 +284,9 @@ export const Overview = ({ items, firstName, now }: OverviewProps) => {
               }))}
             >
               <p className="text-3xl leading-none font-semibold tabular-nums">
-                {formatNumber(items.length)}
+                {formatNumber(offers.length)}
               </p>
-              <p className="text-muted-foreground mt-1 text-xs">itens</p>
+              <p className="text-muted-foreground mt-1 text-xs">ofertas</p>
             </DonutChart>
             <ul className="grid gap-2 text-sm">
               {breakdown.map((slice) => (
@@ -303,16 +308,16 @@ export const Overview = ({ items, firstName, now }: OverviewProps) => {
 
         <Card className="gap-4 lg:col-span-4">
           <CardHeader>
-            <CardTitle>Dias mais movimentados</CardTitle>
+            <CardTitle>Programas</CardTitle>
             <CardDescription>
-              Itens criados por dia da semana no período.
+              Ofertas cadastradas por programa de milhas no período.
             </CardDescription>
           </CardHeader>
           <CardContent className="px-4">
             <BarChart
-              label="Itens criados"
-              data={weekdays.map((bar) => ({
-                label: bar.weekday,
+              label="Ofertas cadastradas"
+              data={programs.map((bar) => ({
+                label: bar.program,
                 value: bar.count,
               }))}
             />
@@ -321,21 +326,21 @@ export const Overview = ({ items, firstName, now }: OverviewProps) => {
 
         <Card className="gap-4 lg:col-span-4">
           <CardHeader>
-            <CardTitle>Próximos prazos</CardTitle>
-            <CardDescription>Itens pendentes, do mais urgente.</CardDescription>
+            <CardTitle>Próximas viagens</CardTitle>
+            <CardDescription>Ofertas em aberto, do embarque mais próximo.</CardDescription>
           </CardHeader>
           <CardContent>
             {deadlines.length === 0 ? (
               <EmptyState
                 icon={CalendarClock}
-                title="Nenhum prazo pendente"
-                description="Itens com prazo aparecem aqui até serem concluídos."
+                title="Nenhum embarque à vista"
+                description="Ofertas com data de ida aparecem aqui até serem emitidas."
                 className="py-4"
               />
             ) : (
               <ul className="grid gap-3">
-                {deadlines.map(({ item, daysLeft }) => (
-                  <li key={item.id} className="flex items-center gap-3">
+                {deadlines.map(({ offer, daysLeft }) => (
+                  <li key={offer.id} className="flex items-center gap-3">
                     <span
                       aria-hidden
                       className={cn(
@@ -349,7 +354,7 @@ export const Overview = ({ items, firstName, now }: OverviewProps) => {
                     </span>
                     <span className="grid min-w-0 gap-0.5">
                       <span className="truncate text-sm font-medium">
-                        {item.title}
+                        {offerRoute(offer)}
                       </span>
                       <span
                         className={cn(
@@ -371,11 +376,11 @@ export const Overview = ({ items, firstName, now }: OverviewProps) => {
 
         <Card className="gap-4 lg:col-span-4">
           <CardHeader>
-            <CardTitle>Atividade recente</CardTitle>
-            <CardDescription>Os últimos itens cadastrados.</CardDescription>
+            <CardTitle>Últimas ofertas</CardTitle>
+            <CardDescription>As ofertas cadastradas mais recentemente.</CardDescription>
             <CardAction>
               <Button asChild variant="ghost" size="sm" className="-mr-2">
-                <Link href="/app/itens">
+                <Link href="/app/ofertas">
                   Ver todos
                   <ArrowUpRight />
                 </Link>
@@ -383,29 +388,29 @@ export const Overview = ({ items, firstName, now }: OverviewProps) => {
             </CardAction>
           </CardHeader>
           <CardContent>
-            {items.length === 0 ? (
+            {offers.length === 0 ? (
               <EmptyState
                 icon={Inbox}
-                title="Nenhum item ainda"
-                description="Crie o primeiro item para ver a atividade aqui."
+                title="Nenhuma oferta ainda"
+                description="Cadastre a primeira oferta para vê-la aqui."
                 className="py-4"
               />
             ) : (
               <ul className="grid gap-3">
-                {items.slice(0, 5).map((item) => (
+                {offers.slice(0, 5).map((offer) => (
                   <li
-                    key={item.id}
+                    key={offer.id}
                     className="flex items-center justify-between gap-3"
                   >
                     <span className="grid min-w-0 gap-0.5">
                       <span className="truncate text-sm font-medium">
-                        {item.title}
+                        {offerRoute(offer)}
                       </span>
                       <span className="text-muted-foreground text-xs tabular-nums">
-                        {item.category} · {formatDate(item.createdAt)}
+                        {offer.program} · {formatMiles(offer.miles)}
                       </span>
                     </span>
-                    <ItemStatusBadge status={item.status} />
+                    <OfferStatusBadge status={offer.status} />
                   </li>
                 ))}
               </ul>
@@ -415,7 +420,7 @@ export const Overview = ({ items, firstName, now }: OverviewProps) => {
       </div>
 
       <section aria-label="Atalhos" className="grid gap-4 sm:grid-cols-3">
-        <NewItemDialog>
+        <NewOfferDialog>
           <button
             type="button"
             className="surface surface-interactive focus-visible:ring-ring/50 flex items-center gap-4 p-4 text-left outline-none focus-visible:ring-[3px]"
@@ -427,13 +432,13 @@ export const Overview = ({ items, firstName, now }: OverviewProps) => {
               <Plus className="size-5" />
             </span>
             <span className="grid gap-0.5">
-              <span className="text-sm font-medium">Novo item</span>
+              <span className="text-sm font-medium">Nova oferta</span>
               <span className="text-muted-foreground text-xs">
-                Cadastre em poucos segundos.
+                Guarde um voo em promoção.
               </span>
             </span>
           </button>
-        </NewItemDialog>
+        </NewOfferDialog>
         {shortcuts.map(({ title, description, href, icon: Icon }) => (
           <Link
             key={href}

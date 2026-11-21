@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function ItemsLoading() {
+export default function OffersLoading() {
   return (
     <div role="status" aria-label="Carregando" className="grid gap-6">
       <div className="grid gap-3">

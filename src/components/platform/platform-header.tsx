@@ -15,7 +15,7 @@ export const PlatformHeader = () => (
     />
     <SidebarTrigger aria-label="Abrir ou fechar o menu" className="-ml-1.5" />
     <form
-      action="/app/itens"
+      action="/app/ofertas"
       role="search"
       className="relative ml-1 hidden w-full max-w-xs sm:block"
     >
@@ -27,8 +27,8 @@ export const PlatformHeader = () => (
         type="search"
         name="busca"
         maxLength={80}
-        placeholder="Buscar item"
-        aria-label="Buscar item pelo nome"
+        placeholder="Buscar rota"
+        aria-label="Buscar oferta pela rota"
         className="h-9 rounded-full pl-9"
       />
     </form>
