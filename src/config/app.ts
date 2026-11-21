@@ -16,7 +16,7 @@ interface AppConfig {
 
 export const appConfig: AppConfig = {
   name: 'GO GO MILES',
-  tagline: 'Encontre voos baratos em milhas antes que a oportunidade acabe.',
+  tagline: 'Encontre voos baratos em milhas de forma simples e personalizada.',
   contactEmail: '',
   theme: {
     color: '#0401d0',

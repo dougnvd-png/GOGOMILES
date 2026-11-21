@@ -102,8 +102,8 @@ interface LandingContent {
 export const landingContent: LandingContent = {
   hero: {
     eyebrow: 'Passagens aéreas em milhas',
-    title: 'Ache voos baratos em milhas e',
-    highlight: 'não perca a oportunidade',
+    title: 'Encontre voos baratos em milhas de forma',
+    highlight: 'simples e personalizada',
     subtitle:
       'O GO GO MILES reúne em um só lugar as promoções de passagens em milhas que você encontra: rota, programa, cabine, datas, milhas, taxas e o link para resgatar.',
     primaryAction: { label: 'Começar agora', href: '/app' },
