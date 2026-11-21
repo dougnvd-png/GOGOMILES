@@ -1,0 +1,1056 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+  Tokens do design system. A descrição completa está em DESIGN.md.
+  As cores nascem de --brand, definida em src/config/app.ts e calculada em src/lib/theme.ts.
+  O estilo (clean, gradient, glass) e a fonte chegam por data-style e data-font no <html>.
+*/
+:root {
+  color-scheme: light;
+  --radius: 0.875rem;
+
+  --primary: var(--brand-primary-light);
+  --primary-foreground: var(--brand-on-primary-light);
+  --brand-ink: var(--brand-ink-light);
+  --brand-accent: oklch(from var(--primary) l c calc(h + 40));
+  --brand-gradient: linear-gradient(135deg, var(--primary), var(--primary));
+  --brand-soft: color-mix(in oklab, var(--primary) 11%, transparent);
+
+  --background: color-mix(in oklab, var(--brand) 4%, #f6f7fb);
+  --foreground: color-mix(in oklab, var(--brand) 14%, #0c0e16);
+  --card: #ffffff;
+  --card-foreground: var(--foreground);
+  --popover: #ffffff;
+  --popover-foreground: var(--foreground);
+  --secondary: color-mix(in oklab, var(--brand) 6%, #eceef4);
+  --secondary-foreground: var(--foreground);
+  --muted: color-mix(in oklab, var(--brand) 5%, #eef0f5);
+  --muted-foreground: color-mix(in oklab, var(--brand) 9%, #5a6373);
+  --accent: color-mix(in oklab, var(--brand) 9%, #eceef4);
+  --accent-foreground: var(--foreground);
+  --destructive: #dc2626;
+  --border: color-mix(in oklab, var(--brand) 14%, rgb(15 23 42 / 10%));
+  --input: color-mix(in oklab, var(--brand) 12%, rgb(15 23 42 / 16%));
+  --ring: var(--primary);
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: color-mix(in oklab, var(--brand) 8%, #eef0f5);
+  --sidebar-accent-foreground: var(--foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--primary);
+
+  --success: #15803d;
+  --warning: #b45309;
+  --status-open: #64748b;
+  --status-progress: var(--warning);
+  --status-done: var(--success);
+
+  --chart-1: var(--primary);
+  --chart-2: var(--brand-accent);
+  --chart-3: oklch(from var(--primary) l c calc(h - 40));
+
+  --surface-highlight: rgb(255 255 255 / 90%);
+  --surface-shadow:
+    0 1px 2px rgb(15 23 42 / 5%),
+    0 18px 40px -28px
+      color-mix(in oklab, var(--brand) 35%, rgb(15 23 42 / 45%));
+  --surface-blur: none;
+  --glow:
+    0 0 0 1px color-mix(in oklab, var(--primary) 30%, transparent),
+    0 10px 26px -12px color-mix(in oklab, var(--primary) 65%, transparent);
+
+  --ambient-1: color-mix(in oklab, var(--primary) 7%, transparent);
+  --ambient-2: transparent;
+  --ambient-3: transparent;
+
+  --app-font-sans: 'Geist Variable', ui-sans-serif, system-ui, sans-serif;
+  --app-font-heading: var(--app-font-sans);
+  --app-heading-tracking: -0.028em;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --primary: var(--brand-primary-dark);
+  --primary-foreground: var(--brand-on-primary-dark);
+  --brand-ink: var(--brand-ink-dark);
+  --brand-soft: color-mix(in oklab, var(--primary) 16%, transparent);
+
+  --background: color-mix(in oklab, var(--brand) 6%, #06070b);
+  --foreground: #f1f2f6;
+  --card: color-mix(in oklab, var(--brand) 6%, #0f1119);
+  --popover: color-mix(in oklab, var(--brand) 7%, #12141d);
+  --secondary: rgb(255 255 255 / 7%);
+  --muted: rgb(255 255 255 / 5%);
+  --muted-foreground: #9aa2b3;
+  --accent: rgb(255 255 255 / 8%);
+  --destructive: #f26464;
+  --border: rgb(255 255 255 / 8%);
+  --input: rgb(255 255 255 / 13%);
+
+  --sidebar: color-mix(in oklab, var(--brand) 6%, #0c0e15);
+  --sidebar-accent: rgb(255 255 255 / 7%);
+
+  --success: #34d399;
+  --warning: #fbbf24;
+  --status-open: #94a3b8;
+
+  --surface-highlight: rgb(255 255 255 / 6%);
+  --surface-shadow: 0 24px 48px -32px rgb(0 0 0 / 90%);
+  --glow:
+    0 0 0 1px color-mix(in oklab, var(--primary) 50%, transparent),
+    0 12px 36px -10px color-mix(in oklab, var(--primary) 75%, transparent);
+
+  --ambient-1: color-mix(in oklab, var(--primary) 16%, transparent);
+  --ambient-2: color-mix(in oklab, var(--brand-accent) 8%, transparent);
+}
+
+[data-font='friendly'] {
+  --app-font-sans: 'Nunito Variable', ui-sans-serif, system-ui, sans-serif;
+  --app-heading-tracking: -0.018em;
+}
+
+[data-font='elegant'] {
+  --app-font-heading: 'Playfair Display Variable', Georgia, serif;
+  --app-heading-tracking: -0.012em;
+}
+
+/* Estilo gradient: a cor aparece em transição nos destaques. */
+[data-style='gradient'] {
+  --brand-gradient: linear-gradient(
+    135deg,
+    var(--primary) 0%,
+    var(--brand-accent) 100%
+  );
+  --ambient-1: color-mix(in oklab, var(--primary) 13%, transparent);
+  --ambient-2: color-mix(in oklab, var(--brand-accent) 11%, transparent);
+}
+
+[data-style='gradient'].dark {
+  --ambient-1: color-mix(in oklab, var(--primary) 26%, transparent);
+  --ambient-2: color-mix(in oklab, var(--brand-accent) 20%, transparent);
+}
+
+/* Estilo glass: superfícies translúcidas sobre luz ambiente. */
+[data-style='glass'] {
+  --brand-gradient: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--primary) 88%, #ffffff) 0%,
+    var(--primary) 55%,
+    var(--brand-accent) 130%
+  );
+  --card: rgb(255 255 255 / 66%);
+  --popover: rgb(255 255 255 / 92%);
+  --sidebar: rgb(255 255 255 / 60%);
+  --border: color-mix(in oklab, var(--brand) 16%, rgb(255 255 255 / 80%));
+  --surface-blur: blur(22px) saturate(1.5);
+  --ambient-1: color-mix(in oklab, var(--primary) 26%, transparent);
+  --ambient-2: color-mix(in oklab, var(--brand-accent) 22%, transparent);
+  --ambient-3: color-mix(in oklab, var(--chart-3) 16%, transparent);
+}
+
+[data-style='glass'].dark {
+  --card: color-mix(in oklab, var(--brand) 9%, rgb(255 255 255 / 4%));
+  --popover: color-mix(in oklab, var(--brand) 8%, rgb(18 20 29 / 92%));
+  --sidebar: color-mix(in oklab, var(--brand) 8%, rgb(255 255 255 / 3.5%));
+  --border: rgb(255 255 255 / 9%);
+  --ambient-1: color-mix(in oklab, var(--primary) 34%, transparent);
+  --ambient-2: color-mix(in oklab, var(--brand-accent) 24%, transparent);
+  --ambient-3: color-mix(in oklab, var(--chart-3) 20%, transparent);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-status-open: var(--status-open);
+  --color-status-progress: var(--status-progress);
+  --color-status-done: var(--status-done);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-accent: var(--brand-accent);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: calc(var(--radius) - 6px);
+  --radius-md: calc(var(--radius) - 4px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 10px);
+  --shadow-surface: var(--surface-shadow);
+  --shadow-glow: var(--glow);
+  --font-sans: var(--app-font-sans);
+  --font-heading: var(--app-font-heading);
+  --animate-rise: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scrollbar-color: color-mix(in oklab, var(--foreground) 22%, transparent)
+      transparent;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: 'ss01', 'cv11';
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--app-font-heading);
+    letter-spacing: var(--app-heading-tracking);
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--primary) 30%, transparent);
+  }
+
+  /* Tudo o que é clicável mostra o cursor de mão. */
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  summary,
+  label[for],
+  select {
+    cursor: pointer;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Luz ambiente: manchas grandes e suaves atrás de todo o conteúdo. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60rem 36rem at 8% -8%, var(--ambient-1), transparent 68%),
+    radial-gradient(52rem 34rem at 100% 4%, var(--ambient-2), transparent 70%),
+    radial-gradient(56rem 40rem at 56% 112%, var(--ambient-3), transparent 70%);
+}
+
+/* Superfície: a aparência de todo card, painel e menu lateral. */
+[data-slot='card'],
+[data-slot='sidebar-inner'],
+.surface {
+  background-image: linear-gradient(
+    180deg,
+    var(--surface-highlight),
+    transparent 5rem
+  );
+  box-shadow: var(--surface-shadow);
+  -webkit-backdrop-filter: var(--surface-blur);
+  backdrop-filter: var(--surface-blur);
+}
+
+.surface {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background-color: var(--card);
+}
+
+[data-style='gradient'] [data-slot='card'],
+[data-style='gradient'] .surface {
+  background-image: linear-gradient(
+    150deg,
+    color-mix(in oklab, var(--primary) 9%, transparent),
+    transparent 46%
+  );
+}
+
+[data-slot='popover-content'],
+[data-slot='dropdown-menu-content'],
+[data-slot='select-content'],
+[data-slot='dialog-content'],
+[data-slot='alert-dialog-content'] {
+  -webkit-backdrop-filter: var(--surface-blur);
+  backdrop-filter: var(--surface-blur);
+  box-shadow:
+    0 0 0 1px var(--border),
+    0 28px 64px -24px rgb(0 0 0 / 45%);
+}
+
+.surface-interactive {
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.surface-interactive:hover {
+  border-color: color-mix(in oklab, var(--primary) 45%, var(--border));
+  transform: translateY(-2px);
+}
+
+/* Destaque com a cor do projeto: sólido no clean, degradê no gradient e no glass. */
+.brand-surface {
+  background-color: var(--primary);
+  background-image: var(--brand-gradient);
+  color: var(--primary-foreground);
+}
+
+.brand-glow {
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 22%),
+    var(--glow);
+}
+
+[data-slot='button'][data-variant='default'] {
+  background-image: var(--brand-gradient);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 20%),
+    0 8px 22px -12px color-mix(in oklab, var(--primary) 80%, transparent);
+  transition:
+    box-shadow 0.2s ease,
+    filter 0.2s ease,
+    transform 0.1s ease;
+}
+
+[data-slot='button'][data-variant='default']:hover {
+  filter: brightness(1.08);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 24%),
+    0 12px 28px -12px color-mix(in oklab, var(--primary) 90%, transparent);
+}
+
+[data-slot='button']:active {
+  transform: translateY(1px);
+}
+
+.brand-text {
+  color: var(--brand-ink);
+}
+
+[data-style='gradient'] .brand-text,
+[data-style='glass'] .brand-text {
+  background-image: linear-gradient(
+    115deg,
+    var(--brand-ink),
+    oklch(from var(--brand-ink) l c calc(h + 40))
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Rótulo pequeno acima dos títulos de seção. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--brand-ink);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  content: '';
+  width: 1.25rem;
+  height: 1px;
+  background: currentcolor;
+  opacity: 0.6;
+}
+
+/*
+  Item ativo do menu lateral: a cor do projeto com brilho. Quando o destaque
+  deslizante está pronto, é ele que desenha o fundo e o item fica só com o texto.
+*/
+.sidebar-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -10;
+  border-radius: var(--radius-md);
+  opacity: 0;
+  pointer-events: none;
+  background-color: var(--primary);
+  background-image: var(--brand-gradient);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 22%),
+    var(--glow);
+}
+
+[data-indicator='ready'] > .sidebar-indicator {
+  transition:
+    transform 0.42s cubic-bezier(0.22, 1, 0.36, 1),
+    width 0.2s ease,
+    height 0.2s ease;
+}
+
+[data-indicator='ready']
+  [data-slot='sidebar-menu-button'][data-active='true'] {
+  background: none;
+  box-shadow: none;
+}
+
+[data-slot='sidebar-menu-button'][data-active='true'] {
+  background-color: var(--primary);
+  background-image: var(--brand-gradient);
+  color: var(--primary-foreground);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 22%),
+    var(--glow);
+}
+
+[data-slot='sidebar-menu-button'][data-active='true']:hover {
+  color: var(--primary-foreground);
+  filter: brightness(1.06);
+}
+
+/* Linhas finas de grade usadas em fundos decorativos. */
+.grid-backdrop {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 3.5rem 3.5rem;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent);
+}
+
+/*
+  Movimento. Tudo anima só transform, opacity e clip-path, que não travam a
+  rolagem. Quem pede menos movimento vê o estado final, parado.
+*/
+@property --spin-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Revelação ao rolar: coloque data-reveal no bloco. O atraso vem de --reveal-delay. */
+[data-motion='on'] [data-reveal]:not([data-revealed]) {
+  opacity: 0;
+}
+
+[data-motion='on'] [data-reveal][data-revealed='in'] {
+  animation: reveal-in 0.85s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.98);
+    filter: blur(8px);
+  }
+}
+
+/* Animações em ciclo só rodam com o bloco na tela. */
+[data-motion='on'] [data-reveal]:not([data-inview]) .motion-loop {
+  animation-play-state: paused;
+}
+
+/* Luz que segue o cursor: coloque data-spotlight em um painel. */
+[data-spotlight] {
+  position: relative;
+}
+
+[data-spotlight]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background: radial-gradient(
+    24rem circle at var(--mx, 50%) var(--my, 0%),
+    color-mix(in oklab, var(--primary) 16%, transparent),
+    transparent 62%
+  );
+}
+
+[data-spotlight]:hover::after {
+  opacity: 1;
+}
+
+/* Entrada do topo da página inicial, em sequência. */
+.hero-word,
+.hero-fade {
+  animation: hero-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(var(--order, 0) * 70ms + 80ms);
+}
+
+.hero-word {
+  display: inline-block;
+}
+
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.55em);
+    filter: blur(10px);
+  }
+}
+
+/* Brilho que atravessa o texto em destaque nos estilos gradient e glass. */
+[data-style='gradient'] .brand-shimmer,
+[data-style='glass'] .brand-shimmer {
+  background-image: linear-gradient(
+    110deg,
+    var(--brand-ink) 0%,
+    oklch(from var(--brand-ink) l c calc(h + 40)) 35%,
+    oklch(from var(--brand-ink) calc(l + 0.12) c calc(h + 20)) 50%,
+    oklch(from var(--brand-ink) l c calc(h + 40)) 65%,
+    var(--brand-ink) 100%
+  );
+  background-size: 220% 100%;
+  animation:
+    hero-in 0.9s cubic-bezier(0.22, 1, 0.36, 1) backwards,
+    shimmer 7s ease-in-out infinite alternate;
+  animation-delay: calc(var(--order, 0) * 70ms + 80ms), 1.2s;
+}
+
+@keyframes shimmer {
+  to {
+    background-position: 100% 0;
+  }
+}
+
+/* Luz ambiente em movimento, atrás do topo e da chamada final. */
+.aurora {
+  position: absolute;
+  inset: -6rem 0 auto;
+  z-index: -10;
+  height: 48rem;
+  pointer-events: none;
+  opacity: 0.55;
+}
+
+.dark .aurora {
+  opacity: 0.85;
+}
+
+[data-style='clean'] .aurora {
+  opacity: 0.3;
+}
+
+.aurora > span {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(96px);
+  will-change: transform;
+}
+
+.aurora > span:nth-child(1) {
+  top: 0;
+  left: 6%;
+  width: 34rem;
+  height: 30rem;
+  background: color-mix(in oklab, var(--primary) 42%, transparent);
+  animation: drift-a 19s ease-in-out infinite alternate;
+}
+
+.aurora > span:nth-child(2) {
+  top: 4rem;
+  right: 4%;
+  width: 30rem;
+  height: 28rem;
+  background: color-mix(in oklab, var(--brand-accent) 34%, transparent);
+  animation: drift-b 23s ease-in-out infinite alternate;
+}
+
+.aurora > span:nth-child(3) {
+  top: 16rem;
+  left: 36%;
+  width: 28rem;
+  height: 22rem;
+  background: color-mix(in oklab, var(--chart-3) 26%, transparent);
+  animation: drift-c 27s ease-in-out infinite alternate;
+}
+
+@keyframes drift-a {
+  to {
+    transform: translate(9rem, 5rem) scale(1.18);
+  }
+}
+
+@keyframes drift-b {
+  to {
+    transform: translate(-8rem, 7rem) scale(0.86);
+  }
+}
+
+@keyframes drift-c {
+  to {
+    transform: translate(6rem, -6rem) scale(1.22);
+  }
+}
+
+/* Grade decorativa que desliza devagar. */
+.grid-pan {
+  animation: grid-pan 26s linear infinite;
+}
+
+@keyframes grid-pan {
+  to {
+    background-position:
+      3.5rem 3.5rem,
+      3.5rem 3.5rem;
+  }
+}
+
+/* Reflexo que atravessa o botão principal de tempos em tempos. */
+.sheen {
+  position: relative;
+  overflow: hidden;
+}
+
+.sheen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    transparent 35%,
+    rgb(255 255 255 / 38%) 50%,
+    transparent 65%
+  );
+  transform: translateX(-130%);
+  animation: sheen 4.8s ease-in-out infinite;
+}
+
+@keyframes sheen {
+  0%,
+  55% {
+    transform: translateX(-130%);
+  }
+
+  100% {
+    transform: translateX(130%);
+  }
+}
+
+/* Prévia do painel: inclinada no início, endireita conforme a página rola. */
+.preview-tilt {
+  transform-origin: top center;
+}
+
+@media (min-width: 64rem) {
+  .preview-tilt {
+    transform: rotateX(9deg);
+  }
+}
+
+.glow-pulse {
+  animation: glow-pulse 7s ease-in-out infinite alternate;
+}
+
+@keyframes glow-pulse {
+  from {
+    opacity: 0.22;
+    transform: scale(0.94);
+  }
+
+  to {
+    opacity: 0.5;
+    transform: scale(1.06);
+  }
+}
+
+.float-a {
+  animation: float 6s ease-in-out infinite alternate;
+}
+
+.float-b {
+  animation: float 7.5s ease-in-out -2s infinite alternate-reverse;
+}
+
+@keyframes float {
+  from {
+    transform: translateY(-9px);
+  }
+
+  to {
+    transform: translateY(9px);
+  }
+}
+
+/* Linha de gráfico que se desenha da esquerda para a direita. */
+.draw-in {
+  animation: draw-in 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.2s backwards;
+}
+
+.draw-loop {
+  animation: draw-loop 6s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes draw-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes draw-loop {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  38%,
+  88% {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+  }
+
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 0;
+  }
+}
+
+/* Faixa de frases que corre sem parar. Pausa com o cursor em cima. */
+.ticker {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker 38s linear infinite;
+}
+
+.ticker:hover .ticker-track {
+  animation-play-state: paused;
+}
+
+@keyframes ticker {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Ilustrações dos benefícios: cada peça entra na sua vez, em ciclo. */
+.cycle {
+  animation: cycle-on var(--cycle, 6s) ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * var(--gap, 0.9s));
+}
+
+@keyframes cycle-on {
+  0%,
+  4% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+
+  12%,
+  84% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  94%,
+  100% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+.cycle-turn {
+  animation: cycle-turn 6s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 2s);
+}
+
+@keyframes cycle-turn {
+  0%,
+  3% {
+    opacity: 0;
+  }
+
+  9%,
+  30% {
+    opacity: 1;
+  }
+
+  38%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.type-in {
+  animation: type-in 6s steps(9, end) infinite;
+}
+
+@keyframes type-in {
+  0%,
+  6% {
+    width: 0;
+  }
+
+  34%,
+  90% {
+    width: 5rem;
+  }
+
+  100% {
+    width: 0;
+  }
+}
+
+.result-in {
+  animation: result-in 6s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.35s);
+}
+
+@keyframes result-in {
+  0%,
+  32% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  42%,
+  88% {
+    opacity: var(--rest-opacity, 1);
+    transform: none;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+.bell-ring {
+  transform-origin: 50% 10%;
+  animation: bell-ring 4.5s ease-in-out infinite;
+}
+
+@keyframes bell-ring {
+  0%,
+  22%,
+  100% {
+    transform: rotate(0);
+  }
+
+  4%,
+  12% {
+    transform: rotate(16deg);
+  }
+
+  8%,
+  16% {
+    transform: rotate(-14deg);
+  }
+}
+
+.slide-note {
+  animation: slide-note 4.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+@keyframes slide-note {
+  0%,
+  18% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.96);
+  }
+
+  30%,
+  90% {
+    opacity: 1;
+    transform: none;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.96);
+  }
+}
+
+/* Passos: cada card acende na sua vez. */
+.step-cycle::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border: 1px solid var(--primary);
+  border-radius: inherit;
+  box-shadow: var(--glow);
+  pointer-events: none;
+  opacity: 0;
+  animation: cycle-turn 6s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 2s);
+}
+
+.connector-grow {
+  transform-origin: left;
+  animation: connector-grow 6s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 2s + 1.4s);
+}
+
+@keyframes connector-grow {
+  0% {
+    transform: scaleX(0);
+    opacity: 1;
+  }
+
+  12%,
+  30% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+
+  40%,
+  100% {
+    transform: scaleX(1);
+    opacity: 0.35;
+  }
+}
+
+/* Borda luminosa que percorre o contorno do painel. */
+.spin-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--spin-angle),
+    transparent 0 68%,
+    var(--primary) 84%,
+    var(--brand-accent) 93%,
+    transparent 100%
+  );
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  animation: spin-border 7s linear infinite;
+}
+
+@keyframes spin-border {
+  to {
+    --spin-angle: 360deg;
+  }
+}
+
+/* Barra fina no topo que acompanha a rolagem da página. */
+.scroll-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 40;
+  height: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: var(--brand-gradient, var(--primary));
+  pointer-events: none;
+}
+
+@keyframes scroll-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes preview-flatten {
+  from {
+    transform: rotateX(17deg) scale(0.93);
+  }
+
+  to {
+    transform: rotateX(0deg) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .scroll-progress {
+      animation: scroll-progress linear both;
+      animation-timeline: scroll(root);
+    }
+
+    @media (min-width: 64rem) {
+      .preview-tilt {
+        animation: preview-flatten linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 42%;
+      }
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-loop,
+  .aurora > span,
+  .sheen::after,
+  .spin-border::before,
+  .step-cycle::before {
+    animation: none !important;
+  }
+
+  [data-motion='on'] [data-reveal]:not([data-revealed]) {
+    opacity: 1;
+  }
+}
