@@ -2,10 +2,12 @@ import {
   date,
   index,
   integer,
+  jsonb,
   pgEnum,
   pgTable,
   text,
   timestamp,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
 
@@ -37,4 +39,31 @@ export const offers = pgTable(
       .defaultNow(),
   },
   (table) => [index('offers_owner_id_idx').on(table.ownerId)],
+).enableRLS();
+
+// Documentos privados de cada pessoa (saldos, perfil, destinos-estrela, rotas
+// vigiadas, fila de busca e planos salvos). O tipo e a validação ficam em
+// src/lib/miles/user-data.ts. Sempre filtrados por owner_id.
+export const userDocs = pgTable(
+  'user_docs',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    ownerId: text('owner_id').notNull(),
+    kind: text('kind').notNull(),
+    key: text('key').notNull(),
+    data: jsonb('data').notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    createdAt: timestamp('created_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    uniqueIndex('user_docs_owner_kind_key_idx').on(
+      table.ownerId,
+      table.kind,
+      table.key,
+    ),
+  ],
 ).enableRLS();

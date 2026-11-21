@@ -14,6 +14,7 @@ const envSchema = z.object({
   ),
   RESEND_API_KEY: optionalText,
   EMAIL_FROM: optionalText,
+  ANTHROPIC_API_KEY: optionalText,
 });
 
 const parsed = envSchema.safeParse({
@@ -23,6 +24,7 @@ const parsed = envSchema.safeParse({
   DATABASE_URL: process.env.DATABASE_URL,
   RESEND_API_KEY: process.env.RESEND_API_KEY,
   EMAIL_FROM: process.env.EMAIL_FROM,
+  ANTHROPIC_API_KEY: process.env.ANTHROPIC_API_KEY,
 });
 
 if (!parsed.success) {
@@ -40,5 +42,7 @@ export const isAuthConfigured = () =>
 export const isDatabaseConfigured = () => Boolean(env.DATABASE_URL);
 
 export const isEmailConfigured = () => Boolean(env.RESEND_API_KEY);
+
+export const isPlannerConfigured = () => Boolean(env.ANTHROPIC_API_KEY);
 
 export const isDemoMode = () => !isAuthConfigured() && !isDatabaseConfigured();

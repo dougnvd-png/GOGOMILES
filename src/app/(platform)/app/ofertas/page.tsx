@@ -5,7 +5,7 @@ import { PageHeader } from '@/components/platform/page-header';
 import { formatNumber } from '@/lib/format';
 import { listOffers } from '@/server/queries/offers';
 
-export const metadata: Metadata = { title: 'Ofertas' };
+export const metadata: Metadata = { title: 'Minhas ofertas' };
 
 const searchMaxLength = 80;
 
@@ -20,7 +20,7 @@ export default async function OffersPage({
     <>
       <PageHeader
         eyebrow="Passagens em milhas"
-        title="Ofertas"
+        title="Minhas ofertas"
         description={`${formatNumber(offers.length)} ofertas guardadas. Busque pela rota, filtre por programa e cabine e acompanhe cada uma.`}
       />
       <OffersTable
