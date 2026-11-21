@@ -87,22 +87,25 @@ export const Wallet = ({ data }: { data: UserData }) => {
 
   const saveBalances = () => {
     startTransition(async () => {
-      for (const program of programs) {
-        const row = rows[program.id];
-        const result = await saveUserDoc({
-          kind: 'saldo',
-          key: program.id,
-          data: {
-            saldo: Number(row.saldo) || 0,
-            vence: row.vence,
-            categoria: row.categoria.trim(),
-            cpm: Number(row.cpm) || program.cpm,
-          },
-        });
-        if (!result.ok) {
-          toast.error(result.error);
-          return;
-        }
+      const results = await Promise.all(
+        programs.map((program) => {
+          const row = rows[program.id];
+          return saveUserDoc({
+            kind: 'saldo',
+            key: program.id,
+            data: {
+              saldo: Number(row.saldo) || 0,
+              vence: row.vence,
+              categoria: row.categoria.trim(),
+              cpm: Number(row.cpm) || program.cpm,
+            },
+          });
+        }),
+      );
+      const failure = results.find((result) => !result.ok);
+      if (failure && !failure.ok) {
+        toast.error(failure.error);
+        return;
       }
       toast.success('Saldos salvos.');
     });

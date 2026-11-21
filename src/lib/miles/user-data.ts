@@ -135,6 +135,8 @@ export interface SavedPlan {
 }
 
 export interface UserData {
+  /** Momento da última gravação de cada tipo de documento. */
+  savedAt: Partial<Record<UserDocKind, string>>;
   saldos: Record<string, Saldo>;
   perfil: Record<string, string>;
   estrelas: Estrela[];
@@ -144,6 +146,7 @@ export interface UserData {
 }
 
 export const emptyUserData: UserData = {
+  savedAt: {},
   saldos: {},
   perfil: {},
   estrelas: [],
@@ -155,6 +158,7 @@ export const emptyUserData: UserData = {
 /** Monta os dados tipados a partir dos documentos guardados. */
 export const buildUserData = (docs: UserDoc[]): UserData => {
   const result: UserData = {
+    savedAt: {},
     saldos: {},
     perfil: {},
     estrelas: [],
@@ -164,6 +168,9 @@ export const buildUserData = (docs: UserDoc[]): UserData => {
   };
   for (const doc of docs) {
     const data = doc.data;
+    if (!result.savedAt[doc.kind] || doc.updatedAt > (result.savedAt[doc.kind] ?? "")) {
+      result.savedAt[doc.kind] = doc.updatedAt;
+    }
     if (doc.kind === 'saldo') {
       result.saldos[doc.key] = data as unknown as Saldo;
     } else if (doc.kind === 'perfil') {

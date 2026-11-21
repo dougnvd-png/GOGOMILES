@@ -26,6 +26,7 @@ import { Sparkline } from '@/components/charts/sparkline';
 import { MetricCard } from '@/components/dashboard/metric-card';
 import { Trend } from '@/components/dashboard/trend';
 import { EmptyState } from '@/components/empty-state';
+import { LastUpdated } from '@/components/miles/last-updated';
 import { OfferStatusBadge } from '@/components/offers/offer-status-badge';
 import { NewOfferDialog } from '@/components/offers/new-offer-dialog';
 import { Button } from '@/components/ui/button';
@@ -53,6 +54,7 @@ import {
   upcomingDeadlines,
   type PeriodDays,
 } from '@/lib/insights';
+import { latestOf } from '@/lib/miles/radar';
 import {
   formatMiles,
   offerRoute,
@@ -160,6 +162,15 @@ export const Overview = ({ offers, firstName, now }: OverviewProps) => {
           <p className="text-muted-foreground text-pretty">
             {describePending(pending, overdue)}
           </p>
+          <LastUpdated
+            entries={[
+              {
+                label: 'Última oferta cadastrada ou emitida',
+                at: latestOf(offers.flatMap((offer) => [offer.createdAt, offer.issuedAt])),
+              },
+              { label: 'Números calculados em', at: now },
+            ]}
+          />
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <Tabs value={String(period)} onValueChange={handlePeriodChange}>

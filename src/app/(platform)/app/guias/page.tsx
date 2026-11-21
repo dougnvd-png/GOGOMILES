@@ -2,10 +2,12 @@ import type { Metadata } from 'next';
 import { GraduationCap, MapPin } from 'lucide-react';
 
 import { ExternalLink, Plan, Tag } from '@/components/miles/bits';
+import { LastUpdated } from '@/components/miles/last-updated';
 import { PageHeader } from '@/components/platform/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { getRadar } from '@/data/radar';
-import { formatDate } from '@/lib/format';
+import { formatDateTime } from '@/lib/format';
+import { latestOf } from '@/lib/miles/radar';
 
 export const metadata: Metadata = { title: 'Guias e manual' };
 
@@ -21,6 +23,7 @@ export default function GuidesPage() {
         eyebrow="Aprenda e planeje"
         title="Guias e manual"
         description="O manual do caçador de milhas e guias de destino com aeroportos, planos de emissão e fontes."
+        updatedAt={<LastUpdated entries={[{ label: 'Radar (manual e dicas)', at: radar.meta.ultimaVarredura }, { label: 'Guia de destino mais recente', at: latestOf(radar.guias.map((guide) => guide.atualizado)) }]} />}
       />
       <Card>
         <CardHeader>
@@ -138,7 +141,7 @@ export default function GuidesPage() {
             )}
             {guide.atualizado && (
               <p className="text-muted-foreground text-xs">
-                Atualizado em {formatDate(`${guide.atualizado}T12:00:00Z`)}
+                Atualizado em {formatDateTime(guide.atualizado)}
               </p>
             )}
           </CardContent>

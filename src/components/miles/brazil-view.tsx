@@ -628,7 +628,7 @@ export const BrazilView = ({
                   </span>
                 </div>
                 <p className="text-muted-foreground text-xs">
-                  {flight.verificado ? '✅ verificado ao vivo · ' : '📰 alerta publicado · '}
+                  {flight.verificado ? `✅ verificado ao vivo em ${flight.verificado} · ` : '📰 alerta de blog (sem data própria, vale a data do radar) · '}
                   {flight.programa} · {flight.quando}
                 </p>
                 {flight.nota && <p className="text-sm">{flight.nota}</p>}

@@ -66,3 +66,24 @@ export const formatNumber = (value: number) => numberFormatter.format(value);
 
 export const formatRelativeDays = (days: number) =>
   relativeFormatter.format(days, 'day');
+
+const dateTimeFormatter = new Intl.DateTimeFormat('pt-BR', {
+  day: '2-digit',
+  month: '2-digit',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  hourCycle: 'h23',
+  timeZone,
+});
+
+/** Data e hora no fuso de São Paulo, como 21/11/2026 09:55. Texto AAAA-MM-DD vira só a data. */
+export const formatDateTime = (value: string | Date) => {
+  if (typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return formatDate(`${value}T12:00:00Z`);
+  }
+  return dateTimeFormatter.format(toDate(value)).replace(',', '');
+};
+
+/** Verdadeiro quando o texto é só uma data, sem hora registrada. */
+export const isDateOnly = (value: string) => /^\d{4}-\d{2}-\d{2}$/.test(value);

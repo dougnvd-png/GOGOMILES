@@ -132,7 +132,7 @@ export const WorldView = ({ flights, highlights, partners, snow, caribbean }: Wo
                   </span>
                 </div>
                 <p className="text-muted-foreground text-xs">
-                  {flight.verificado ? '✅ verificado ao vivo · ' : '📰 alerta publicado · '}
+                  {flight.verificado ? `✅ verificado ao vivo em ${flight.verificado} · ` : '📰 alerta de blog (sem data própria, vale a data do radar) · '}
                   {flight.programa}
                   {flight.cia ? ` · voa ${flight.cia}` : ''} · {flight.quando}
                 </p>

@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
 
 import { OffersTable } from '@/components/offers/offers-table';
+import { LastUpdated } from '@/components/miles/last-updated';
 import { PageHeader } from '@/components/platform/page-header';
 import { formatNumber } from '@/lib/format';
+import { latestOf } from '@/lib/miles/radar';
 import { listOffers } from '@/server/queries/offers';
 
 export const metadata: Metadata = { title: 'Minhas ofertas' };
@@ -22,6 +24,7 @@ export default async function OffersPage({
         eyebrow="Passagens em milhas"
         title="Minhas ofertas"
         description={`${formatNumber(offers.length)} ofertas guardadas. Busque pela rota, filtre por programa e cabine e acompanhe cada uma.`}
+        updatedAt={<LastUpdated entries={[{ label: 'Última oferta cadastrada ou alterada', at: latestOf(offers.flatMap((offer) => [offer.createdAt, offer.issuedAt])) }]} />}
       />
       <OffersTable
         key={initialSearch}

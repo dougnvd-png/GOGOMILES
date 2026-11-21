@@ -10,7 +10,7 @@ import { PriceGrid, type GridCell } from '@/components/miles/price-grid';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldLabel } from '@/components/ui/field';
-import { formatNumber } from '@/lib/format';
+import { formatDateTime, formatNumber } from '@/lib/format';
 import {
   azulLink,
   brDate,
@@ -18,6 +18,7 @@ import {
   codeFrom,
   dayPrices,
   knownRoutes,
+  latestOf,
   latamLink,
   light,
   lightText,
@@ -63,6 +64,12 @@ export const CalendarView = ({ data, today, watches, initialFrom = '', initialTo
   const days = Object.keys(prices).filter((day) => day >= today).sort();
   const rule = ruler(o, d);
   const minimum = days.length ? Math.min(...days.map((day) => prices[day][0].milhas)) : 0;
+
+  const lastChecked = latestOf(
+    (data.historico.find((history) => history.id === `${o}-${d}`)?.pontos ?? []).map(
+      (point) => point.consultado,
+    ),
+  );
 
   const month = manualMonth ?? (days[0] ? monthOf(days[0]) : monthOf(today));
   const months = [month, addMonths(month, 1)];
@@ -196,6 +203,7 @@ export const CalendarView = ({ data, today, watches, initialFrom = '', initialTo
               {days.length > 0
                 ? `${days.length} ${days.length === 1 ? 'dia' : 'dias'} com preço · mais barato ${formatNumber(minimum)} milhas · régua ${rule.nome}: bom até ${formatNumber(rule.ref)}`
                 : `Nenhum preço registrado ainda para ${o} → ${d}.`}
+              {lastChecked && ` · última consulta ao vivo desta rota em ${formatDateTime(lastChecked)} (hora não registrada)`}
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">

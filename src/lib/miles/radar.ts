@@ -702,3 +702,17 @@ export const toPriceData = (data: RadarData): PriceData => ({
   brasil: data.brasil.filter((item) => item.tipo === 'achado'),
   mundo: data.mundo.filter((item) => item.tipo === 'voo'),
 });
+
+/** O mais recente entre vários momentos (ISO ou AAAA-MM-DD). Vazio quando não há nenhum. */
+export const latestOf = (values: (string | null | undefined)[]) => {
+  let best: string | null = null;
+  for (const value of values) {
+    if (value && (best === null || Date.parse(value) > Date.parse(best))) {
+      best = value;
+    }
+  }
+  return best;
+};
+
+/** Data DD/MM/AAAA de um texto do radar, no formato AAAA-MM-DD. */
+export const brToIso = (text: string | undefined) => parseBr(text);

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Thermometer, TrendingUp } from 'lucide-react';
 
 import { ExternalLink, Tag } from '@/components/miles/bits';
+import { LastUpdated } from '@/components/miles/last-updated';
 import { PageHeader } from '@/components/platform/page-header';
 import {
   Card,
@@ -56,6 +57,7 @@ export default function RadarPage() {
           radar.meta.resumo ??
           'Promoções de transferência de pontos dos bancos para as companhias.'
         }
+        updatedAt={<LastUpdated entries={[{ label: 'Radar de promoções e bônus', at: radar.meta.ultimaVarredura }]} />}
       />
       {open.length > 0 && (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">

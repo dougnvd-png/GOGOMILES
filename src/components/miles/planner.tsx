@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 
 import { AirportInput } from '@/components/miles/airport-input';
 import { AirlineBadge, ExternalLink, LightDot, Plan, Tag } from '@/components/miles/bits';
+import { LastUpdated } from '@/components/miles/last-updated';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Field, FieldLabel } from '@/components/ui/field';
@@ -56,7 +57,9 @@ interface PlannerProps {
   plannerReady: boolean;
   initial: { origem: string; destino: string };
   /** Plano salvo aberto pela carteira. */
-  saved: { request: PlanRequest; plan: PlanResult } | null;
+  saved: { request: PlanRequest; plan: PlanResult; at: string } | null;
+  /** Momento da última varredura do radar usado pelo agente. */
+  radarAt?: string;
 }
 
 const PriceCard = ({
@@ -186,12 +189,16 @@ const PlanOutput = ({
   request,
   plan,
   fromSaved,
+  at,
+  radarAt,
 }: {
   data: PriceData;
   today: string;
   request: PlanRequest;
   plan: PlanResult;
   fromSaved: boolean;
+  at: string;
+  radarAt?: string;
 }) => {
   const [isPending, startTransition] = useTransition();
   const [saved, setSaved] = useState(false);
@@ -259,6 +266,12 @@ const PlanOutput = ({
           </p>
         </CardHeader>
         <CardContent className="grid gap-3">
+          <LastUpdated
+            entries={[
+              { label: fromSaved ? 'Plano salvo em' : 'Estratégia gerada em', at },
+              { label: 'Radar usado', at: radarAt },
+            ]}
+          />
           {plan.resumo && <p>{plan.resumo}</p>}
           {!fromSaved && (
             <div className="flex flex-wrap gap-2">
@@ -533,7 +546,7 @@ const PlanOutput = ({
   );
 };
 
-export const Planner = ({ data, today, plannerReady, initial, saved }: PlannerProps) => {
+export const Planner = ({ data, today, plannerReady, initial, saved, radarAt }: PlannerProps) => {
   const [origin, setOrigin] = useState(saved?.request.origem ?? initial.origem);
   const [destination, setDestination] = useState(saved?.request.destino ?? initial.destino);
   const [stop, setStop] = useState(saved?.request.parada ?? '');
@@ -548,7 +561,7 @@ export const Planner = ({ data, today, plannerReady, initial, saved }: PlannerPr
   const [suggestStop, setSuggestStop] = useState(true);
   const [stopover, setStopover] = useState(true);
   const [flex, setFlex] = useState(true);
-  const [result, setResult] = useState<{ request: PlanRequest; plan: PlanResult } | null>(saved);
+  const [result, setResult] = useState<{ request: PlanRequest; plan: PlanResult; at: string } | null>(saved);
   const [fromSaved, setFromSaved] = useState(Boolean(saved));
   const [isPending, startTransition] = useTransition();
 
@@ -576,7 +589,7 @@ export const Planner = ({ data, today, plannerReady, initial, saved }: PlannerPr
       setResult(null);
       const answer = await planTrip(request);
       if (answer.ok) {
-        setResult({ request, plan: answer.plan });
+        setResult({ request, plan: answer.plan, at: new Date().toISOString() });
         setFromSaved(false);
       } else {
         toast.error(answer.error);
@@ -714,6 +727,8 @@ export const Planner = ({ data, today, plannerReady, initial, saved }: PlannerPr
           request={result.request}
           plan={result.plan}
           fromSaved={fromSaved}
+          at={result.at}
+          radarAt={radarAt}
         />
       )}
     </div>

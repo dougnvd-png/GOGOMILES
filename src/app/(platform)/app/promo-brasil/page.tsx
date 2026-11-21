@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { BrazilView } from '@/components/miles/brazil-view';
+import { LastUpdated } from '@/components/miles/last-updated';
 import { PageHeader } from '@/components/platform/page-header';
 import { getRadar, todayKey } from '@/data/radar';
 import {
@@ -26,6 +27,7 @@ export default async function BrazilPage() {
         eyebrow="Passagens pelo Brasil"
         title="Promo Brasil"
         description="Passagens promocionais com milhas saindo de Goiânia, Brasília e Campinas. Toque em Planejar para montar a rota completa."
+        updatedAt={<LastUpdated entries={[{ label: 'Radar de promoções e alertas', at: radar.meta.ultimaVarredura }, { label: 'Busca ao vivo nos sites', at: radar.meta.aoVivo }]} />}
       />
       <BrazilView
         data={toPriceData(radar)}

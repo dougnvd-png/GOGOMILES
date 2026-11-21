@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Lightbulb, MapPinned } from 'lucide-react';
 
 import { ExternalLink, Plan, Tag } from '@/components/miles/bits';
+import { LastUpdated } from '@/components/miles/last-updated';
 import { PageHeader } from '@/components/platform/page-header';
 import {
   Card,
@@ -15,7 +16,8 @@ import { getRadar } from '@/data/radar';
 export const metadata: Metadata = { title: 'Stopover' };
 
 export default function StopoverPage() {
-  const stops = [...getRadar().stopovers].sort(
+  const radar = getRadar();
+  const stops = [...radar.stopovers].sort(
     (a, b) => (a.ordem ?? 0) - (b.ordem ?? 0),
   );
   return (
@@ -24,6 +26,7 @@ export default function StopoverPage() {
         eyebrow="Paradas no caminho"
         title="Stopover"
         description="Stopover é uma parada de mais de 24 horas no meio da viagem. Conexão é a troca de avião no mesmo dia."
+        updatedAt={<LastUpdated entries={[{ label: 'Radar de regras e promoções', at: radar.meta.ultimaVarredura }]} />}
       />
       <Card>
         <CardHeader>

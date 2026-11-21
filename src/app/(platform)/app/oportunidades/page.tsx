@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Plane } from 'lucide-react';
 
 import { ExternalLink } from '@/components/miles/bits';
+import { LastUpdated } from '@/components/miles/last-updated';
 import { PageHeader } from '@/components/platform/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
@@ -14,11 +15,13 @@ import {
 } from '@/components/ui/table';
 import { getRadar } from '@/data/radar';
 import { formatDate, formatNumber } from '@/lib/format';
+import { latestOf } from '@/lib/miles/radar';
 
 export const metadata: Metadata = { title: 'Oportunidades' };
 
 export default function OpportunitiesPage() {
-  const list = [...getRadar().oportunidades].sort((a, b) =>
+  const radar = getRadar();
+  const list = [...radar.oportunidades].sort((a, b) =>
     String(b.encontrado ?? '').localeCompare(String(a.encontrado ?? '')),
   );
   return (
@@ -27,6 +30,7 @@ export default function OpportunitiesPage() {
         eyebrow="Emissões em milhas"
         title="Oportunidades"
         description="Oportunidades de emissão encontradas em alertas e nos sites das companhias. Confirme o preço no site antes de transferir pontos."
+        updatedAt={<LastUpdated entries={[{ label: 'Radar de oportunidades', at: radar.meta.ultimaVarredura }, { label: 'Oportunidade mais recente encontrada', at: latestOf(radar.oportunidades.map((item) => item.encontrado)) }]} />}
       />
       <Card>
         <CardHeader>

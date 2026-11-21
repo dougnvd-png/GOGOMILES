@@ -6,6 +6,8 @@ interface PageHeaderProps {
   eyebrow?: string;
   description?: ReactNode;
   actions?: ReactNode;
+  /** Data e hora da última atualização das informações da tela. */
+  updatedAt?: ReactNode;
 }
 
 export const PageHeader = ({
@@ -13,6 +15,7 @@ export const PageHeader = ({
   eyebrow,
   description,
   actions,
+  updatedAt,
 }: PageHeaderProps) => (
   <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
     <div className="grid gap-2">
@@ -25,6 +28,7 @@ export const PageHeader = ({
           {description}
         </p>
       )}
+      {updatedAt}
     </div>
     {actions && (
       <div className="flex flex-wrap items-center gap-2">{actions}</div>
