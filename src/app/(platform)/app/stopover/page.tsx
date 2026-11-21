@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Lightbulb, MapPinned } from 'lucide-react';
 
-import { ExternalLink, Plan, Tag } from '@/components/miles/bits';
+import { AirlineBadges, ExternalLink, Plan, Tag } from '@/components/miles/bits';
 import { LastUpdated } from '@/components/miles/last-updated';
 import { PageHeader } from '@/components/platform/page-header';
 import {
@@ -42,8 +42,9 @@ export default function StopoverPage() {
           {stops.map((stop) => (
             <Plan key={stop.id}>
               <div className="flex flex-wrap items-center justify-between gap-2 font-medium">
-                <span>
-                  {stop.programa} · {stop.cidade}
+                <span className="flex flex-wrap items-center gap-2">
+                  <AirlineBadges text={stop.programa.split(' · ')[0]} />
+                  {[...stop.programa.split(' · ').slice(1), stop.cidade].join(' · ')}
                 </span>
                 <Tag
                   tone={

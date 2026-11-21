@@ -17,7 +17,7 @@ import {
 import { toast } from 'sonner';
 
 import { AirportInput } from '@/components/miles/airport-input';
-import { AirlineBadge, ExternalLink, LightDot, Plan, Tag } from '@/components/miles/bits';
+import { AirlineBadge, AirlineBadges, ExternalLink, LightDot, Plan, Tag } from '@/components/miles/bits';
 import { LastUpdated } from '@/components/miles/last-updated';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -367,7 +367,7 @@ const PlanOutput = ({
                   <span className="brand-text">{route.milhasPorTrechoPorPessoa}</span>
                 </div>
                 <p className="text-muted-foreground text-xs">
-                  {route.programa} · {route.cias}
+                  <AirlineBadges text={`${route.programa ?? ''} ${route.cias ?? ''}`} />
                   {route.taxas ? ` · taxas ${route.taxas}` : ''}
                   {route.totalEstimado ? ` · total ${route.totalEstimado}` : ''}
                 </p>

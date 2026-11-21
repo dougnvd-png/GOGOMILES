@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Link2, Plane, Snowflake, Sun } from 'lucide-react';
 
-import { ExternalLink, Plan, Tag } from '@/components/miles/bits';
+import { AirlineBadges, ExternalLink, Plan, Tag } from '@/components/miles/bits';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { formatNumber } from '@/lib/format';
@@ -133,8 +133,8 @@ export const WorldView = ({ flights, highlights, partners, snow, caribbean }: Wo
                 </div>
                 <p className="text-muted-foreground text-xs">
                   {flight.verificado ? `✅ verificado ao vivo em ${flight.verificado} · ` : '📰 alerta de blog (sem data própria, vale a data do radar) · '}
-                  {flight.programa}
-                  {flight.cia ? ` · voa ${flight.cia}` : ''} · {flight.quando}
+                  <AirlineBadges text={flight.programa} />
+                  {flight.cia && <> · voa <AirlineBadges text={flight.cia} /></>} · {flight.quando}
                 </p>
                 <div className="flex flex-wrap items-center gap-2">
                   <Tag tone={flight.regiao === 'Executiva' ? 'warn' : 'blue'}>{flight.regiao}</Tag>
@@ -175,7 +175,7 @@ export const WorldView = ({ flights, highlights, partners, snow, caribbean }: Wo
             <Plan key={partner.id}>
               <div className="flex flex-wrap items-center justify-between gap-2 font-medium">
                 <span>
-                  {partner.programa} → {partner.parceiras}
+                  <AirlineBadges text={partner.programa} /> → <AirlineBadges text={partner.parceiras} />
                 </span>
                 {partner.alerta ? (
                   <Tag tone="bad">{partner.alerta}</Tag>

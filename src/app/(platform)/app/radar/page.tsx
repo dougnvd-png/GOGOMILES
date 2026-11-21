@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Thermometer, TrendingUp } from 'lucide-react';
 
-import { ExternalLink, Tag } from '@/components/miles/bits';
+import { AirlineBadges, ExternalLink, Tag } from '@/components/miles/bits';
 import { LastUpdated } from '@/components/miles/last-updated';
 import { PageHeader } from '@/components/platform/page-header';
 import {
@@ -67,7 +67,7 @@ export default function RadarPage() {
               <Card key={promo.id} className="gap-2">
                 <CardHeader>
                   <CardTitle className="text-base">
-                    {promo.de} → {promo.para}
+                    {promo.de} → <AirlineBadges text={promo.para} />
                   </CardTitle>
                   <CardDescription>
                     Até {promo.bonusMax ?? '?'}% · {promo.veredito ?? ''}
@@ -118,7 +118,7 @@ export default function RadarPage() {
                 return (
                   <TableRow key={promo.id}>
                     <TableCell className="max-w-56 font-medium whitespace-normal">
-                      {promo.de} → {promo.para}
+                      {promo.de} → <AirlineBadges text={promo.para} />
                     </TableCell>
                     <TableCell className="text-right tabular-nums">
                       {promo.bonusMax != null ? `${promo.bonusMax}%` : '—'}
@@ -173,7 +173,7 @@ export default function RadarPage() {
                 .map((bench) => (
                   <TableRow key={bench.id}>
                     <TableCell className="font-medium">
-                      {bench.de} → {bench.para}
+                      {bench.de} → <AirlineBadges text={bench.para} />
                     </TableCell>
                     <TableCell className="text-right tabular-nums">
                       {bench.comum ?? '—'}

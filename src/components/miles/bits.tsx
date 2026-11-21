@@ -1,26 +1,43 @@
 import type { ReactNode } from 'react';
 import { Plane } from 'lucide-react';
 
-import { airlineOf, type Light } from '@/lib/miles/radar';
+import { airlineOf, findAirlines, type Light } from '@/lib/miles/radar';
 import { cn } from '@/lib/utils';
 
-const airlineStyles: Record<string, string> = {
-  GOL: 'bg-orange-600 text-white',
-  AZUL: 'bg-blue-800 text-white',
-  LATAM: 'bg-fuchsia-900 text-white',
+const badgeBase =
+  'inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-bold tracking-wide whitespace-nowrap';
+
+/** Selo colorido de uma companhia aérea ou programa. Reconhece o nome dentro de textos como "LATAM Pass". */
+export const AirlineBadge = ({ name }: { name: string | undefined }) => {
+  const [match] = findAirlines(name);
+  const label = match?.name ?? airlineOf(name);
+  return (
+    <span className={cn(badgeBase, match?.cls ?? 'bg-slate-600 text-white')}>
+      <Plane className="size-3" aria-hidden />
+      {label}
+    </span>
+  );
 };
 
-export const AirlineBadge = ({ name }: { name: string | undefined }) => {
-  const airline = airlineOf(name);
+/**
+ * Mostra um selo para cada companhia citada no texto (ex.: "LATAM e Azul").
+ * Sem nenhuma companhia reconhecida, mostra o texto como está.
+ */
+export const AirlineBadges = ({ text }: { text: string | undefined }) => {
+  const found = findAirlines(text);
+  if (found.length === 0) {
+    return <>{text}</>;
+  }
+  const extra = String(text ?? '').match(/\(([^)]*)\)/)?.[1];
   return (
-    <span
-      className={cn(
-        'inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[11px] font-bold tracking-wide whitespace-nowrap',
-        airlineStyles[airline] ?? 'bg-slate-600 text-white',
-      )}
-    >
-      <Plane className="size-3" aria-hidden />
-      {airline}
+    <span className="inline-flex flex-wrap items-center gap-1">
+      {found.map((item) => (
+        <span key={item.name} className={cn(badgeBase, item.cls)}>
+          <Plane className="size-3" aria-hidden />
+          {item.name}
+        </span>
+      ))}
+      {extra && <span className="text-muted-foreground text-xs font-normal">({extra})</span>}
     </span>
   );
 };

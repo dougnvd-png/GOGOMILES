@@ -439,18 +439,51 @@ export const programKey = (program: string | undefined): string => {
   return /latam/i.test(text) ? 'LATAM' : text;
 };
 
+/** Companhias e programas reconhecidos nos textos, com o nome do selo e a cor. Smiles aparece como GOL. */
+export const airlineTable = [
+  { re: /\bgol\b|smiles/i, name: 'GOL', cls: 'bg-orange-600 text-white' },
+  { re: /azul/i, name: 'AZUL', cls: 'bg-blue-800 text-white' },
+  { re: /latam/i, name: 'LATAM', cls: 'bg-fuchsia-900 text-white' },
+  { re: /\btap\b/i, name: 'TAP', cls: 'bg-emerald-700 text-white' },
+  { re: /copa/i, name: 'COPA', cls: 'bg-sky-700 text-white' },
+  { re: /american/i, name: 'AMERICAN', cls: 'bg-red-700 text-white' },
+  { re: /iberia/i, name: 'IBERIA', cls: 'bg-rose-700 text-white' },
+  { re: /air france/i, name: 'AIR FRANCE', cls: 'bg-indigo-800 text-white' },
+  { re: /\bklm\b/i, name: 'KLM', cls: 'bg-cyan-700 text-white' },
+  { re: /turkish/i, name: 'TURKISH', cls: 'bg-red-800 text-white' },
+  { re: /qatar/i, name: 'QATAR', cls: 'bg-purple-900 text-white' },
+  { re: /emirates/i, name: 'EMIRATES', cls: 'bg-red-600 text-white' },
+  { re: /delta/i, name: 'DELTA', cls: 'bg-blue-900 text-white' },
+  { re: /united/i, name: 'UNITED', cls: 'bg-blue-700 text-white' },
+  { re: /japan airlines|\bjal\b/i, name: 'JAL', cls: 'bg-red-900 text-white' },
+  { re: /aerom[eé]xico/i, name: 'AEROMÉXICO', cls: 'bg-slate-800 text-white' },
+  { re: /avianca/i, name: 'AVIANCA', cls: 'bg-red-500 text-white' },
+  { re: /air canada/i, name: 'AIR CANADA', cls: 'bg-red-700 text-white' },
+  { re: /\bita\b/i, name: 'ITA', cls: 'bg-teal-700 text-white' },
+  { re: /icelandair/i, name: 'ICELANDAIR', cls: 'bg-sky-800 text-white' },
+  { re: /south african/i, name: 'SOUTH AFRICAN', cls: 'bg-green-800 text-white' },
+  { re: /korean/i, name: 'KOREAN', cls: 'bg-blue-600 text-white' },
+  { re: /air europa/i, name: 'AIR EUROPA', cls: 'bg-indigo-600 text-white' },
+] as const;
+
+/** Companhias e programas citados em um texto, na ordem em que aparecem, sem repetir. */
+export const findAirlines = (text: string | undefined) => {
+  const found: { name: string; cls: string; at: number }[] = [];
+  for (const entry of airlineTable) {
+    const at = String(text ?? '').search(entry.re);
+    if (at >= 0 && !found.some((item) => item.name === entry.name)) {
+      found.push({ name: entry.name, cls: entry.cls, at });
+    }
+  }
+  return found.sort((a, b) => a.at - b.at);
+};
+
 export const airlineOf = (value: string | undefined) => {
-  const text = String(value ?? '');
-  if (/gol|smiles/i.test(text)) {
-    return 'GOL';
+  const [first] = findAirlines(value);
+  if (first) {
+    return first.name;
   }
-  if (/azul/i.test(text)) {
-    return 'AZUL';
-  }
-  if (/latam/i.test(text)) {
-    return 'LATAM';
-  }
-  return text.replace(/\(.*\)/, '').trim() || '?';
+  return String(value ?? '').replace(/\(.*\)/, '').trim() || '?';
 };
 
 /* ---------- links de busca nos sites oficiais (só leitura, a compra é no site) ---------- */

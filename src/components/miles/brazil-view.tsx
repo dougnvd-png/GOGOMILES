@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { AirportInput } from '@/components/miles/airport-input';
 import {
   AirlineBadge,
+  AirlineBadges,
   ExternalLink,
   LightDot,
   Plan,
@@ -426,7 +427,7 @@ const StarDestinations = ({ stars, achados }: { stars: Estrela[]; achados: Achad
                       <p key={hit.id} className="text-sm">
                         {hit.verificado ? '✅ ' : '📰 '}
                         {iata(hit.origem)}→{iata(hit.destino)} · {formatNumber(hit.milhas)} ·{' '}
-                        {hit.programa} · {hit.quando}{' '}
+                        <AirlineBadges text={hit.programa} /> · {hit.quando}{' '}
                         {link && <ExternalLink href={link}>abrir na {programName(hit.programa)}</ExternalLink>}
                       </p>
                     );
@@ -629,7 +630,7 @@ export const BrazilView = ({
                 </div>
                 <p className="text-muted-foreground text-xs">
                   {flight.verificado ? `✅ verificado ao vivo em ${flight.verificado} · ` : '📰 alerta de blog (sem data própria, vale a data do radar) · '}
-                  {flight.programa} · {flight.quando}
+                  <AirlineBadges text={flight.programa} /> · {flight.quando}
                 </p>
                 {flight.nota && <p className="text-sm">{flight.nota}</p>}
                 <div className="flex flex-wrap items-center gap-2 pt-1">

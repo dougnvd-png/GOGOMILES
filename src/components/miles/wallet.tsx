@@ -6,7 +6,7 @@ import { Bell, CreditCard, FolderOpen, Lock, User } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { AirportInput } from '@/components/miles/airport-input';
-import { Plan } from '@/components/miles/bits';
+import { AirlineBadge, Plan } from '@/components/miles/bits';
 import { MetricCard } from '@/components/dashboard/metric-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -209,7 +209,9 @@ export const Wallet = ({ data }: { data: UserData }) => {
                   const row = rows[program.id];
                   return (
                     <TableRow key={program.id}>
-                      <TableCell className="font-medium">{program.nome}</TableCell>
+                      <TableCell className="font-medium">
+                        {program.tipo === 'cia' ? <AirlineBadge name={program.nome} /> : program.nome}
+                      </TableCell>
                       <TableCell>
                         <Input
                           aria-label={`Saldo ${program.nome}`}

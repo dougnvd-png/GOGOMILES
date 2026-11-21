@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Plane } from 'lucide-react';
 
-import { ExternalLink } from '@/components/miles/bits';
+import { AirlineBadges, ExternalLink } from '@/components/miles/bits';
 import { LastUpdated } from '@/components/miles/last-updated';
 import { PageHeader } from '@/components/platform/page-header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -65,7 +65,7 @@ export default function OpportunitiesPage() {
                     )}
                   </TableCell>
                   <TableCell className="text-xs">
-                    {item.programa} · {item.cia}
+                    <AirlineBadges text={`${item.programa ?? ''} ${item.cia ?? ''}`} />
                   </TableCell>
                   <TableCell className="text-right font-medium tabular-nums">
                     {formatNumber(item.milhas)}
