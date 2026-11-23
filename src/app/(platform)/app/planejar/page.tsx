@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { Planner } from '@/components/miles/planner';
 import { LastUpdated } from '@/components/miles/last-updated';
 import { PageHeader } from '@/components/platform/page-header';
-import { getRadar, todayKey } from '@/data/radar';
+import { getRadarLive, todayKey } from '@/data/radar';
 import { isPlannerConfigured } from '@/lib/env';
 import { planRequestSchema, type PlanResult } from '@/lib/miles/plan';
 import { toPriceData } from '@/lib/miles/radar';
@@ -18,7 +18,7 @@ export default async function PlanPage({ searchParams }: PageProps<'/app/planeja
     searchParams,
     getUserData(),
   ]);
-  const radar = getRadar();
+  const radar = await getRadarLive();
   const text = (value: string | string[] | undefined) =>
     typeof value === 'string' ? value.trim().slice(0, maxLength) : '';
 

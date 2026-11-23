@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { BrazilView } from '@/components/miles/brazil-view';
 import { LastUpdated } from '@/components/miles/last-updated';
 import { PageHeader } from '@/components/platform/page-header';
-import { getRadar, todayKey } from '@/data/radar';
+import { getRadarLive, todayKey } from '@/data/radar';
 import {
   toPriceData,
   type Achado,
@@ -19,7 +19,7 @@ const byOrder = <T extends { ordem?: number }>(a: T, b: T) =>
   (a.ordem ?? 0) - (b.ordem ?? 0);
 
 export default async function BrazilPage() {
-  const radar = getRadar();
+  const radar = await getRadarLive();
   const user = await getUserData();
   return (
     <>

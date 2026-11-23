@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { WorldView } from '@/components/miles/world-view';
 import { LastUpdated } from '@/components/miles/last-updated';
 import { PageHeader } from '@/components/platform/page-header';
-import { getRadar } from '@/data/radar';
+import { getRadarLive } from '@/data/radar';
 import type { Destaque, Ideia, Parceira, VooMundo } from '@/lib/miles/radar';
 
 export const metadata: Metadata = { title: 'Mundo' };
@@ -11,8 +11,8 @@ export const metadata: Metadata = { title: 'Mundo' };
 const byOrder = <T extends { ordem?: number }>(a: T, b: T) =>
   (a.ordem ?? 0) - (b.ordem ?? 0);
 
-export default function WorldPage() {
-  const radar = getRadar();
+export default async function WorldPage() {
+  const radar = await getRadarLive();
   const { mundo } = radar;
   return (
     <>

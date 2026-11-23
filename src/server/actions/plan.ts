@@ -1,6 +1,6 @@
 'use server';
 
-import { getRadar, todayKey } from '@/data/radar';
+import { getRadarLive, todayKey } from '@/data/radar';
 import { env } from '@/lib/env';
 import {
   planRequestSchema,
@@ -33,7 +33,7 @@ const parseJson = (text: string): PlanResult | null => {
 };
 
 const buildPrompt = async (request: unknown) => {
-  const radar = getRadar();
+  const radar = await getRadarLive();
   const today = todayKey();
   const user = await getUserData();
   const promos = radar.promos

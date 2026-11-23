@@ -1,3 +1,4 @@
+import { formatDateTime } from '@/lib/format';
 import { cities } from '@/lib/miles/cities';
 
 /* ---------- tipos dos dados do radar ---------- */
@@ -179,6 +180,10 @@ export interface PontoHistorico {
   milhas: number;
   programa: string;
   url?: string;
+  /** Momento exato da consulta, quando conhecido (leituras gravadas no banco). */
+  consultadoEm?: string;
+  /** Observação sobre a leitura, como "preço base" ou "lido com conta logada". */
+  nota?: string;
 }
 
 export interface Historico {
@@ -538,6 +543,12 @@ export interface DayPrice {
   url?: string;
 }
 
+/** Texto da origem de um ponto do histórico, com a data e, quando existir, a hora da consulta. */
+export const pointSource = (point: PontoHistorico) =>
+  'consultado em ' +
+  (point.consultadoEm ? formatDateTime(point.consultadoEm) : brDate(String(point.consultado))) +
+  (point.nota ? ' · ' + point.nota : '');
+
 const lastPoints = (points: PontoHistorico[]) => {
   const last: Record<string, PontoHistorico> = {};
   for (const point of points) {
@@ -574,7 +585,7 @@ export const dayPrices = (
   };
   const history = data.historico.find((h) => h.id === `${o}-${d}`);
   for (const point of lastPoints(history?.pontos ?? [])) {
-    add(point.data_voo, point.milhas, point.programa, `✅ consultado em ${brDate(String(point.consultado))}`, true, point.url);
+    add(point.data_voo, point.milhas, point.programa, `✅ ${pointSource(point)}`, true, point.url);
   }
   for (const item of publishedFlights(data)) {
     if (iata(item.origem) === o && iata(item.destino) === d) {
@@ -632,7 +643,7 @@ export const monthSearch = (
       continue;
     }
     for (const point of lastPoints(history.pontos ?? [])) {
-      add(to, point.data_voo, point.milhas, point.programa, `✅ consultado em ${brDate(String(point.consultado))}`, point.url);
+      add(to, point.data_voo, point.milhas, point.programa, `✅ ${pointSource(point)}`, point.url);
     }
   }
   for (const item of publishedFlights(data)) {

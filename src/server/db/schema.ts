@@ -67,3 +67,26 @@ export const userDocs = pgTable(
     ),
   ],
 ).enableRLS();
+
+// Leituras de preço em milhas feitas nos sites das companhias. São dados
+// compartilhados por todos (não pertencem a uma pessoa) e só são gravados por
+// scripts do servidor, nunca pelo navegador. Por isso não há owner_id.
+export const priceChecks = pgTable(
+  'price_checks',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    origin: text('origin').notNull(),
+    destination: text('destination').notNull(),
+    flightDate: date('flight_date').notNull(),
+    program: text('program').notNull(),
+    miles: integer('miles').notNull(),
+    url: text('url'),
+    note: text('note'),
+    checkedAt: timestamp('checked_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    index('price_checks_route_idx').on(table.origin, table.destination),
+  ],
+).enableRLS();
