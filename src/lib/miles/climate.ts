@@ -6,7 +6,8 @@ import climate from '@/data/climate.json';
  * temporadas de neve e de furacões são revisadas à mão em `climate-places.json`.
  */
 
-export type Scene = 'snow' | 'sun' | 'rain';
+export type Sky = 'sun' | 'clouds' | 'rain' | 'snow';
+export type Land = 'beach' | 'city' | 'mountains';
 export type RainLevel = 'alta' | 'média' | 'baixa';
 
 interface Place {
@@ -15,6 +16,8 @@ interface Place {
   snowNote?: string;
   maySnow?: number[];
   hurricane?: boolean;
+  /** Meses de noites escuras em que a aurora boreal pode aparecer. */
+  aurora?: number[];
 }
 
 export interface ClimateNote {
@@ -23,8 +26,11 @@ export interface ClimateNote {
 }
 
 export interface DestinationWeather {
-  /** Fundo temático da tela. Nulo mantém o fundo normal. */
-  scene: Scene | null;
+  /** Céu e paisagem do fundo da tela, de acordo com a época. */
+  sky: Sky;
+  land: Land;
+  /** Época em que a aurora boreal pode aparecer. Nunca é garantia. */
+  aurora: boolean;
   /** Temperatura média do mês, em graus Celsius. */
   temperature: number;
   /** Chuva média do mês, em milímetros por dia. */
@@ -123,7 +129,11 @@ export const weatherFor = (code: string, month: number): DestinationWeather | nu
   const snowing = place.snow?.includes(month) ?? false;
   const beach = place.kind === 'praia';
   const notes: ClimateNote[] = [];
+  const aurora = place.aurora?.includes(month) ?? false;
 
+  if (aurora) {
+    notes.push({ tone: 'blue', text: 'Temporada de aurora boreal' });
+  }
   if (snowing) {
     notes.push({
       tone: 'blue',
@@ -140,9 +150,14 @@ export const weatherFor = (code: string, month: number): DestinationWeather | nu
     notes.push({ tone: 'bad', text: 'Temporada de furacões' });
   }
 
-  const beachScene: Scene = level === 'alta' ? 'rain' : 'sun';
+  const byRain: Record<RainLevel, Sky> = { alta: 'rain', 'média': 'clouds', baixa: 'sun' };
+  // Onde pode nevar, a época é fria: céu fechado mesmo com pouca chuva.
+  const cold = (place.maySnow?.includes(month) ?? false) && level !== 'alta';
+  const land: Land = beach ? 'beach' : place.kind === 'neve' ? 'mountains' : 'city';
   return {
-    scene: snowing ? 'snow' : beach ? beachScene : null,
+    sky: snowing ? 'snow' : cold ? 'clouds' : byRain[level],
+    land: snowing ? 'mountains' : land,
+    aurora,
     temperature,
     rain,
     rainLevel: level,

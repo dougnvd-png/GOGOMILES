@@ -51,3 +51,12 @@ O quadro sempre diz: **"Clima típico da época, com base em anos anteriores. N�
 3. Quadro, fundos e flocos. Conferir no computador e no celular, modo claro e escuro, e com "reduzir movimento".
 4. Ligar no Calendário e no Planejar viagem. Conferir com datas escritas como "set/2027" e "10/09/2027".
 5. `npm run check` e `npm run build`. Publicar somente depois de um "sim".
+
+## Ajuste pedido em 28/11/2026
+
+- Mais neve e mais imersão: cenário na tela inteira, neve e chuva animadas, quadros um pouco transparentes.
+- Céu de acordo com a chuva do mês: sol (baixa), sol entre nuvens (média), chuva (alta) e neve na temporada.
+- Todos os destinos com dados passam a ter paisagem: praia, cidade ou montanhas.
+- Aviso do planejador trocado por um texto sem termo técnico.
+- Aurora boreal: cortinas de luz e estrelas nos destinos do extremo norte (Lapônia, Noruega, Suécia, Finlândia, Islândia, Canadá e Alasca), na temporada de noites escuras. Aviso de que não há garantia.
+- Novos destinos: Ivalo, Kiruna, Tromsø, Reykjavík, Yellowknife, Whitehorse e Fairbanks.

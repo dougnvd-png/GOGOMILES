@@ -377,10 +377,10 @@ const zoneOf = (code: string) => {
   if (index <= 108) {
     return 'CAR';
   }
-  if (index <= 134) {
+  if (index <= 137) {
     return 'EUA';
   }
-  return index <= 193 ? 'EUR' : 'LONGE';
+  return index <= 198 ? 'EUR' : 'LONGE';
 };
 
 const internationalRuler: Record<string, [number, string]> = {

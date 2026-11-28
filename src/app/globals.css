@@ -1055,39 +1055,85 @@ body::before {
   }
 }
 
-/* Clima no destino: paisagens decorativas atrás da tela e no topo do quadro. */
+/* Clima no destino: cenários decorativos atrás da tela, na frente e no topo do quadro. */
 :root {
-  --scene-sun-sky: oklch(0.89 0.07 232);
-  --scene-rain-sky: oklch(0.8 0.025 250);
-  --scene-snow-sky: oklch(0.88 0.045 248);
-  --scene-sun: oklch(0.88 0.16 88);
-  --scene-sea: oklch(0.72 0.11 218);
-  --scene-wave: oklch(0.8 0.1 205);
-  --scene-sand: oklch(0.88 0.07 82);
-  --scene-trunk: oklch(0.52 0.07 55);
-  --scene-leaves: oklch(0.6 0.13 150);
-  --scene-cloud: oklch(0.93 0.01 250);
-  --scene-mountain: oklch(0.66 0.055 255);
-  --scene-pine: oklch(0.48 0.06 190);
+  --scene-sun-sky: oklch(0.84 0.1 235);
+  --scene-sun-horizon: oklch(0.93 0.08 80);
+  --scene-clouds-sky: oklch(0.82 0.06 238);
+  --scene-clouds-horizon: oklch(0.92 0.025 220);
+  --scene-rain-sky: oklch(0.7 0.035 252);
+  --scene-rain-horizon: oklch(0.84 0.02 240);
+  --scene-snow-sky: oklch(0.79 0.065 252);
+  --scene-snow-horizon: oklch(0.94 0.025 280);
+  --scene-sun: oklch(0.87 0.17 85);
+  --scene-sea: oklch(0.66 0.12 232);
+  --scene-wave-back: oklch(0.73 0.12 215);
+  --scene-wave: oklch(0.82 0.1 200);
+  --scene-sand: oklch(0.89 0.08 80);
+  --scene-sail: oklch(0.99 0.01 90);
+  --scene-hull: oklch(0.55 0.15 30);
+  --scene-trunk: oklch(0.52 0.08 55);
+  --scene-leaves: oklch(0.6 0.15 148);
+  --scene-cloud: oklch(0.98 0.008 250);
+  --scene-rain-cloud: oklch(0.62 0.03 255);
+  --scene-bird: oklch(0.38 0.03 260);
+  --scene-mountain-far: oklch(0.75 0.045 262);
+  --scene-mountain: oklch(0.62 0.06 258);
+  --scene-ground: oklch(0.76 0.1 135);
+  --scene-pine: oklch(0.47 0.08 165);
   --scene-snow: oklch(0.99 0.005 240);
-  --scene-flake-edge: oklch(0.7 0.07 245);
+  --scene-flake-edge: oklch(0.66 0.09 248);
+  --scene-drop: oklch(0.52 0.11 245);
+  --scene-city-far: oklch(0.74 0.045 272);
+  --scene-city: oklch(0.56 0.07 275);
+  --scene-window: oklch(0.93 0.08 90);
+  --scene-park: oklch(0.75 0.09 140);
+  --scene-light: oklch(0.85 0.15 80);
+  --scene-night-sky: oklch(0.2 0.075 272);
+  --scene-night-horizon: oklch(0.36 0.075 225);
+  --scene-aurora-sky: oklch(0.83 0.065 285);
+  --scene-aurora-horizon: oklch(0.93 0.05 190);
+  --scene-aurora-a: oklch(0.82 0.2 155);
+  --scene-aurora-b: oklch(0.75 0.15 195);
+  --scene-aurora-c: oklch(0.62 0.21 310);
+  --scene-star: oklch(0.98 0.02 90);
 }
 
 .dark {
-  --scene-sun-sky: oklch(0.34 0.07 240);
-  --scene-rain-sky: oklch(0.3 0.025 255);
-  --scene-snow-sky: oklch(0.31 0.05 258);
-  --scene-sun: oklch(0.8 0.14 85);
-  --scene-sea: oklch(0.38 0.08 225);
-  --scene-wave: oklch(0.46 0.08 210);
-  --scene-sand: oklch(0.5 0.06 75);
-  --scene-trunk: oklch(0.34 0.05 55);
-  --scene-leaves: oklch(0.4 0.09 152);
-  --scene-cloud: oklch(0.5 0.02 255);
-  --scene-mountain: oklch(0.42 0.05 258);
-  --scene-pine: oklch(0.27 0.04 195);
-  --scene-snow: oklch(0.82 0.02 245);
-  --scene-flake-edge: oklch(0.9 0.02 240);
+  --scene-sun-sky: oklch(0.36 0.09 240);
+  --scene-sun-horizon: oklch(0.38 0.07 60);
+  --scene-clouds-sky: oklch(0.32 0.05 245);
+  --scene-clouds-horizon: oklch(0.36 0.03 225);
+  --scene-rain-sky: oklch(0.27 0.03 258);
+  --scene-rain-horizon: oklch(0.33 0.02 245);
+  --scene-snow-sky: oklch(0.29 0.065 265);
+  --scene-snow-horizon: oklch(0.4 0.055 285);
+  --scene-sun: oklch(0.8 0.15 80);
+  --scene-sea: oklch(0.34 0.08 235);
+  --scene-wave-back: oklch(0.4 0.09 220);
+  --scene-wave: oklch(0.48 0.085 205);
+  --scene-sand: oklch(0.52 0.065 72);
+  --scene-sail: oklch(0.84 0.02 90);
+  --scene-hull: oklch(0.42 0.11 30);
+  --scene-trunk: oklch(0.35 0.055 55);
+  --scene-leaves: oklch(0.42 0.1 150);
+  --scene-cloud: oklch(0.52 0.025 258);
+  --scene-rain-cloud: oklch(0.4 0.025 258);
+  --scene-bird: oklch(0.82 0.02 260);
+  --scene-mountain-far: oklch(0.38 0.05 265);
+  --scene-mountain: oklch(0.46 0.055 258);
+  --scene-ground: oklch(0.4 0.07 140);
+  --scene-pine: oklch(0.28 0.05 170);
+  --scene-snow: oklch(0.85 0.02 245);
+  --scene-flake-edge: oklch(0.92 0.02 240);
+  --scene-drop: oklch(0.78 0.08 235);
+  --scene-city-far: oklch(0.34 0.05 275);
+  --scene-city: oklch(0.25 0.05 278);
+  --scene-window: oklch(0.85 0.14 85);
+  --scene-park: oklch(0.33 0.06 145);
+  --scene-light: oklch(0.85 0.15 80);
+  --scene-aurora-sky: oklch(0.19 0.07 275);
+  --scene-aurora-horizon: oklch(0.3 0.07 215);
 }
 
 .climate-scene {
@@ -1095,54 +1141,196 @@ body::before {
   inset: 0;
   overflow: hidden;
   pointer-events: none;
-  background: linear-gradient(180deg, var(--scene-sky), transparent);
 
-  &[data-scene='sun'] {
+  &[data-sky='sun'] {
     --scene-sky: var(--scene-sun-sky);
+    --scene-horizon: var(--scene-sun-horizon);
   }
 
-  &[data-scene='rain'] {
-    --scene-sky: var(--scene-rain-sky);
+  &[data-sky='clouds'] {
+    --scene-sky: var(--scene-clouds-sky);
+    --scene-horizon: var(--scene-clouds-horizon);
 
-    .climate-land {
-      filter: saturate(0.45);
+    .climate-rays {
+      display: none;
     }
   }
 
-  &[data-scene='snow'] {
+  &[data-sky='rain'] {
+    --scene-sky: var(--scene-rain-sky);
+    --scene-horizon: var(--scene-rain-horizon);
+
+    .climate-land {
+      filter: saturate(0.5) brightness(0.92);
+    }
+
+    .climate-cloud {
+      fill: var(--scene-rain-cloud);
+    }
+  }
+
+  &[data-sky='snow'] {
     --scene-sky: var(--scene-snow-sky);
+    --scene-horizon: var(--scene-snow-horizon);
+
+    .climate-ground {
+      fill: var(--scene-snow);
+    }
+  }
+
+  &[data-place='banner'] {
+    background: linear-gradient(180deg, var(--scene-sky), var(--scene-horizon) 75%);
+
+    .climate-flake,
+    .climate-drop {
+      --fall: 15rem;
+    }
+
+    .climate-sun {
+      top: -1.5rem;
+      right: 22%;
+      width: 8rem;
+    }
   }
 
   &[data-place='page'] {
     position: fixed;
     z-index: -1;
-    opacity: 0.8;
-    /* Céu mais claro atrás do título da página, para o texto continuar legível. */
+    /* Topo mais claro, atrás do título da página, para o texto continuar legível. */
     background: linear-gradient(
       180deg,
-      color-mix(in oklab, var(--scene-sky) 50%, transparent),
-      transparent 60%
+      color-mix(in oklab, var(--scene-sky) 55%, transparent),
+      color-mix(in oklab, var(--scene-sky) 75%, transparent) 40%,
+      var(--scene-horizon)
     );
 
     .climate-land {
-      height: min(38vh, 22rem);
+      height: min(48vh, 28rem);
     }
 
-    .climate-flake {
-      --fall: 108vh;
+    .climate-flake,
+    .climate-drop {
+      --fall: 110vh;
     }
   }
 
-  &[data-place='banner'] {
-    .climate-flake {
-      --fall: 10rem;
-    }
+  /* Poucas partículas passam na frente do conteúdo, sem bloquear cliques. */
+  &[data-place='front'] {
+    position: fixed;
+    z-index: 30;
+    opacity: 0.6;
 
-    .climate-sun {
-      right: 28%;
-      width: 2.25rem;
+    .climate-flake,
+    .climate-drop {
+      --fall: 110vh;
     }
   }
+
+  /* Aurora: noite no topo do quadro; no fundo, tons que mantêm o texto legível. */
+  &[data-aurora='true'] {
+    --scene-sky: var(--scene-aurora-sky);
+    --scene-horizon: var(--scene-aurora-horizon);
+
+    &[data-place='banner'] {
+      --scene-sky: var(--scene-night-sky);
+      --scene-horizon: var(--scene-night-horizon);
+
+      --scene-mountain-far: oklch(0.29 0.055 272);
+      --scene-mountain: oklch(0.36 0.06 262);
+      --scene-snow: oklch(0.8 0.045 215);
+      --scene-pine: oklch(0.2 0.04 185);
+      --scene-light: oklch(0.87 0.16 82);
+
+      /* Montanhas mais baixas, para sobrar céu. */
+      .climate-land {
+        transform: scaleY(0.74);
+        transform-origin: bottom;
+      }
+    }
+  }
+
+  &[data-animate='false'] * {
+    animation: none !important;
+  }
+}
+
+.climate-aurora {
+  position: absolute;
+  top: 0;
+  left: -12%;
+  width: 124%;
+  height: 68%;
+  filter: blur(6px);
+  will-change: transform;
+  animation: climate-wavelight 11s ease-in-out infinite alternate;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  path {
+    fill: none;
+    stroke: var(--scene-ribbon);
+  }
+
+  /* Halo largo, riscas verticais acima e um fio brilhante na base da cortina. */
+  .climate-glow {
+    stroke-width: 52;
+    opacity: 0.35;
+  }
+
+  .climate-streaks {
+    stroke-width: 100;
+    stroke-dasharray: 9 7 4 15 14 9 3 21;
+    opacity: 0.4;
+  }
+
+  .climate-core {
+    stroke-width: 13;
+    stroke-linecap: round;
+    opacity: 0.95;
+  }
+}
+
+.climate-ribbon-a {
+  --scene-ribbon: var(--scene-aurora-a);
+}
+
+.climate-ribbon-b {
+  --scene-ribbon: var(--scene-aurora-b);
+
+  animation-duration: 15s;
+  animation-direction: alternate-reverse;
+  opacity: 0.75;
+}
+
+.climate-ribbon-c {
+  --scene-ribbon: var(--scene-aurora-c);
+
+  animation-duration: 19s;
+  opacity: 0.6;
+}
+
+.climate-scene[data-aurora='true'][data-place='page'] .climate-aurora {
+  height: 66vh;
+  opacity: 0.4;
+}
+
+.dark .climate-scene[data-aurora='true'][data-place='page'] .climate-aurora {
+  opacity: 0.75;
+}
+
+.climate-star {
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  width: var(--size);
+  height: var(--size);
+  border-radius: 9999px;
+  background: var(--scene-star);
+  animation: climate-twinkle 4s ease-in-out var(--delay) infinite alternate;
 }
 
 .climate-land {
@@ -1157,12 +1345,35 @@ body::before {
   fill: var(--scene-sea);
 }
 
+.climate-wave-back {
+  fill: var(--scene-wave-back);
+  animation: climate-wave 11s linear infinite;
+}
+
 .climate-wave {
   fill: var(--scene-wave);
+  animation: climate-wave 7s linear infinite reverse;
 }
 
 .climate-sand {
   fill: var(--scene-sand);
+}
+
+.climate-boat {
+  animation: climate-bob 4s ease-in-out infinite alternate;
+}
+
+.climate-sail {
+  fill: var(--scene-sail);
+}
+
+.climate-hull {
+  fill: var(--scene-hull);
+}
+
+.climate-palm {
+  transform-origin: 1038px 212px;
+  animation: climate-sway 5s ease-in-out infinite alternate;
 }
 
 .climate-trunk {
@@ -1173,49 +1384,212 @@ body::before {
   fill: var(--scene-leaves);
 }
 
+.climate-mountain-far {
+  fill: var(--scene-mountain-far);
+}
+
 .climate-mountain {
   fill: var(--scene-mountain);
+}
+
+.climate-ground {
+  fill: var(--scene-ground);
 }
 
 .climate-pine {
   fill: var(--scene-pine);
 }
 
-.climate-snowcap,
-.climate-snow-ground {
+.climate-snowcap {
   fill: var(--scene-snow);
+}
+
+.climate-city-far {
+  fill: var(--scene-city-far);
+}
+
+.climate-city {
+  fill: var(--scene-city);
+}
+
+.climate-window {
+  fill: var(--scene-window);
+}
+
+.climate-park {
+  fill: var(--scene-park);
+}
+
+.climate-light {
+  fill: var(--scene-light);
 }
 
 .climate-cloud {
   position: absolute;
   fill: var(--scene-cloud);
+  animation: climate-drift 22s ease-in-out infinite alternate;
+
+  &:nth-of-type(even) {
+    animation-duration: 31s;
+    animation-direction: alternate-reverse;
+  }
+}
+
+.climate-bird {
+  position: absolute;
+  fill: var(--scene-bird);
+  animation: climate-fly 18s ease-in-out infinite alternate;
 }
 
 .climate-sun {
   position: absolute;
-  top: 8%;
-  right: 12%;
-  width: 4.5rem;
+  top: 4%;
+  right: 5%;
+  width: 18rem;
   aspect-ratio: 1;
+}
+
+.climate-rays {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: repeating-conic-gradient(
+    color-mix(in oklab, var(--scene-sun) 70%, transparent) 0deg 7deg,
+    transparent 7deg 24deg
+  );
+  mask-image: radial-gradient(circle, black 25%, transparent 68%);
+  animation: climate-spin 48s linear infinite;
+}
+
+.climate-disc {
+  position: absolute;
+  inset: 32%;
   border-radius: 9999px;
   background: var(--scene-sun);
-  box-shadow: 0 0 3rem 1rem color-mix(in oklab, var(--scene-sun) 55%, transparent);
+  box-shadow: 0 0 3rem 1.25rem color-mix(in oklab, var(--scene-sun) 60%, transparent);
 }
 
 .climate-flake {
   position: absolute;
-  top: -0.75rem;
+  top: -1rem;
   left: var(--x);
   width: var(--size);
   height: var(--size);
   border: 1px solid var(--scene-flake-edge);
   border-radius: 9999px;
   background: var(--scene-snow);
-  animation: climate-fall var(--duration) linear var(--delay) infinite;
+  animation: climate-snow var(--duration) linear var(--delay) infinite;
 }
 
-@keyframes climate-fall {
+.climate-drop {
+  position: absolute;
+  top: -3rem;
+  left: var(--x);
+  width: 1.5px;
+  height: calc(var(--size) * 3);
+  border-radius: 9999px;
+  background: linear-gradient(transparent, var(--scene-drop));
+  animation: climate-rain var(--duration) linear var(--delay) infinite;
+}
+
+@media (max-width: 40rem) {
+  .climate-extra {
+    display: none;
+  }
+
+  .climate-scene[data-place='page'] .climate-sun {
+    width: 11rem;
+  }
+}
+
+/* Com um cenário na tela, os quadros ficam um pouco transparentes. */
+body:has(.climate-scene[data-place='page']) [data-slot='card'] {
+  background-color: color-mix(in oklab, var(--card) 82%, transparent);
+}
+
+/* Na neve, uma camada de gelo pousa no alto dos quadros. */
+body:has(.climate-scene[data-place='page'][data-sky='snow']) [data-slot='card'] {
+  box-shadow:
+    inset 0 5px 0 var(--scene-snow),
+    var(--surface-shadow);
+}
+
+@keyframes climate-wavelight {
+  from {
+    transform: translate(-4%, -3%) skewX(-7deg) scaleY(0.9);
+  }
+
   to {
-    transform: translate3d(var(--drift), var(--fall), 0);
+    transform: translate(5%, 4%) skewX(8deg) scaleY(1.14);
+  }
+}
+
+@keyframes climate-twinkle {
+  from {
+    opacity: 0.25;
+  }
+}
+
+@keyframes climate-snow {
+  50% {
+    transform: translate3d(var(--drift), calc(var(--fall) / 2), 0);
+  }
+
+  to {
+    transform: translate3d(calc(var(--drift) * -0.4), var(--fall), 0);
+  }
+}
+
+@keyframes climate-rain {
+  from {
+    transform: rotate(11deg);
+  }
+
+  to {
+    transform: translate3d(calc(var(--fall) * -0.19), var(--fall), 0) rotate(11deg);
+  }
+}
+
+@keyframes climate-wave {
+  to {
+    transform: translateX(-400px);
+  }
+}
+
+@keyframes climate-bob {
+  to {
+    transform: translate(26px, 5px);
+  }
+}
+
+@keyframes climate-sway {
+  from {
+    transform: rotate(-1.5deg);
+  }
+
+  to {
+    transform: rotate(2.5deg);
+  }
+}
+
+@keyframes climate-drift {
+  from {
+    transform: translateX(-2.5rem);
+  }
+
+  to {
+    transform: translateX(2.5rem);
+  }
+}
+
+@keyframes climate-fly {
+  to {
+    transform: translate(14rem, -1.5rem);
+  }
+}
+
+@keyframes climate-spin {
+  to {
+    transform: rotate(360deg);
   }
 }

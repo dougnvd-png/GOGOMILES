@@ -1,7 +1,7 @@
 'use client';
 
 import { useSyncExternalStore } from 'react';
-import { CloudRain, Snowflake, Sun, Thermometer } from 'lucide-react';
+import { CloudRain, CloudSun, Snowflake, Sparkles, Sun } from 'lucide-react';
 
 import { Tag } from '@/components/miles/bits';
 import { ClimateScene } from '@/components/miles/climate-scene';
@@ -10,16 +10,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { climatePeriod, monthNames, weatherFor } from '@/lib/miles/climate';
 import { cityName } from '@/lib/miles/radar';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
-import { cn } from '@/lib/utils';
 
 // Preferência guardada só neste navegador. Sem armazenamento, vale até recarregar.
-const storageKey = 'gogomiles:neve';
+const storageKey = 'gogomiles:clima';
 const listeners = new Set<() => void>();
 let remembered = false;
 
 const readPaused = () => {
   try {
-    return window.localStorage.getItem(storageKey) === 'parada';
+    return window.localStorage.getItem(storageKey) === 'parado';
   } catch {
     return remembered;
   }
@@ -28,7 +27,7 @@ const readPaused = () => {
 const savePaused = (paused: boolean) => {
   remembered = paused;
   try {
-    window.localStorage.setItem(storageKey, paused ? 'parada' : 'caindo');
+    window.localStorage.setItem(storageKey, paused ? 'parado' : 'animado');
   } catch {
     // Janela anônima ou armazenamento bloqueado.
   }
@@ -44,7 +43,14 @@ const subscribe = (notify: () => void) => {
   };
 };
 
-const icons = { snow: Snowflake, sun: Sun, rain: CloudRain };
+const icons = { sun: Sun, clouds: CloudSun, rain: CloudRain, snow: Snowflake };
+
+const skyNames = {
+  sun: 'Época de sol',
+  clouds: 'Sol entre nuvens',
+  rain: 'Época de chuva',
+  snow: 'Época de neve',
+};
 
 /** Fundo temático e quadro com o clima típico do destino no mês da viagem. */
 export const DestinationClimate = ({
@@ -60,25 +66,30 @@ export const DestinationClimate = ({
   if (!code || !month || !weather) {
     return null;
   }
-  const { scene } = weather;
-  const Icon = scene ? icons[scene] : Thermometer;
+  const { sky, land, aurora } = weather;
+  const Icon = aurora ? Sparkles : icons[sky];
   const animate = !paused && !reducedMotion;
+  const scene = { sky, land, aurora, animate };
   const city = cityName(code).replace(/ \([A-Z]{3}\)$/, '');
 
   return (
     <>
-      {scene && <ClimateScene scene={scene} place="page" animate={animate} />}
-      <Card className={cn('overflow-hidden', scene && 'pt-0')}>
-        {scene && (
-          <div className="relative h-36">
-            <ClimateScene scene={scene} place="banner" animate={animate} />
-          </div>
-        )}
+      <ClimateScene {...scene} place="page" />
+      {animate && (sky === 'snow' || sky === 'rain') && (
+        <ClimateScene {...scene} place="front" />
+      )}
+      <Card className="overflow-hidden pt-0">
+        <div className="relative h-52">
+          <ClimateScene {...scene} place="banner" />
+        </div>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Icon className="text-brand-ink size-4 shrink-0" aria-hidden />
             {city} em {monthNames[month - 1]}: clima típico
           </CardTitle>
+          <p className="text-brand-ink text-sm font-medium">
+            {aurora ? 'Noites de aurora boreal' : skyNames[sky]}
+          </p>
         </CardHeader>
         <CardContent className="grid gap-3">
           <dl className="flex flex-wrap gap-x-8 gap-y-2">
@@ -90,7 +101,7 @@ export const DestinationClimate = ({
             </div>
             <div>
               <dt className="text-muted-foreground text-xs">
-                Chance de {scene === 'snow' ? 'chuva ou neve' : 'chuva'}
+                Chance de {sky === 'snow' ? 'chuva ou neve' : 'chuva'}
               </dt>
               <dd className="text-lg font-semibold">
                 {weather.rainLevel}
@@ -110,11 +121,16 @@ export const DestinationClimate = ({
               ))}
             </div>
           )}
+          {aurora && (
+            <p className="text-sm">
+              A aurora depende de céu limpo, noite escura e atividade do Sol. Não há garantia de ver.
+            </p>
+          )}
           <p className="text-muted-foreground text-xs">
             Clima típico da época, com base em anos anteriores. Não é previsão do tempo. Fonte: NASA
             POWER, médias de {climatePeriod}.
           </p>
-          {scene === 'snow' && !reducedMotion && (
+          {!reducedMotion && (
             <div>
               <Button
                 type="button"
@@ -124,7 +140,7 @@ export const DestinationClimate = ({
                   savePaused(!paused);
                 }}
               >
-                {paused ? 'Ligar a neve caindo' : 'Desligar a neve caindo'}
+                {paused ? 'Ligar animação' : 'Pausar animação'}
               </Button>
             </div>
           )}

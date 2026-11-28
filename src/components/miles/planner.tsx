@@ -709,7 +709,7 @@ export const Planner = ({ data, today, plannerReady, initial, saved, radarAt }: 
               <span className="text-muted-foreground text-sm">
                 {plannerReady
                   ? 'O agente cruza o seu pedido com as promoções do radar e as regras de stopover.'
-                  : 'O agente ainda não está conectado: falta a chave da Anthropic no arquivo .env.local.'}
+                  : 'O planejador com inteligência artificial chega em breve. Para ver o clima do destino, preencha o destino e a data da ida.'}
               </span>
             </div>
           </form>

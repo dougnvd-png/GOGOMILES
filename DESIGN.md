@@ -212,7 +212,7 @@ Campos dentro de `FieldGroup` e `Field`, com `FieldLabel` em todo campo e `Field
 
 ### Clima no destino
 
-`DestinationClimate` (`src/components/miles/destination-climate.tsx`) mostra o clima típico do destino no mês da viagem, no Calendário e no Planejar viagem. Neve e praia trocam o fundo da tela por uma paisagem desenhada em `climate-scene.tsx`, com as cores nas variáveis `--scene-*` de `globals.css`. É a única animação em ciclo da área logada: poucos flocos, atrás do conteúdo, parados para quem pede menos movimento e com botão para desligar.
+`DestinationClimate` (`src/components/miles/destination-climate.tsx`) mostra o clima típico do destino no mês da viagem, no Calendário e no Planejar viagem. O céu (sol, nuvens, chuva, neve ou aurora boreal) e a paisagem (praia, cidade ou montanhas) mudam o fundo da tela, com os desenhos em `climate-scene.tsx` e cores e movimentos nas variáveis `--scene-*` de `globals.css`. É a exceção ao movimento calmo da área logada: o cenário fica atrás do conteúdo, só neve e chuva passam na frente (poucas e sem bloquear cliques), tudo para com o botão de pausa ou quando o aparelho pede menos movimento, e o celular mostra metade das partículas.
 
 - O texto sempre diz que é clima típico, não previsão.
 - Dados em `src/data/climate.json` (`npm run clima:baixar`). Destinos e temporadas em `src/data/climate-places.json`.

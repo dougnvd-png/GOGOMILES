@@ -114,8 +114,7 @@ export const planTrip = async (input: unknown): Promise<PlanActionResult> => {
   if (!env.ANTHROPIC_API_KEY) {
     return {
       ok: false,
-      error:
-        'O agente de planejamento ainda não está conectado. Falta a chave da Anthropic no arquivo .env.local.',
+      error: 'O planejador com inteligência artificial chega em breve.',
     };
   }
   if (!allowAttempt(`plan:${userId}`, attemptsPerHour, 60 * 60 * 1000)) {
