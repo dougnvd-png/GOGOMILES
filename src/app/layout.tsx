@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { ptBR } from '@clerk/localizations';
 import { ClerkProvider } from '@clerk/nextjs';
 
 import '@fontsource-variable/geist/wght.css';
@@ -36,6 +37,7 @@ export const metadata: Metadata = {
 const AuthProvider = ({ children }: { children: ReactNode }) =>
   isAuthConfigured() ? (
     <ClerkProvider
+      localization={ptBR}
       signInUrl="/entrar"
       signUpUrl="/criar-conta"
       signInFallbackRedirectUrl={platformHome}
