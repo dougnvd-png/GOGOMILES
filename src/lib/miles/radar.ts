@@ -1,5 +1,6 @@
 import { formatDateTime } from '@/lib/format';
 import { cities } from '@/lib/miles/cities';
+import { countries, searchAliases } from '@/lib/miles/countries';
 
 /* ---------- tipos dos dados do radar ---------- */
 
@@ -299,6 +300,32 @@ const normalize = (text: string) =>
     .replace(/[̀-ͯ]/g, '')
     .toLowerCase();
 
+/** Países, apelidos e regiões, já sem acento, com os códigos das cidades. */
+const places = Object.entries({ ...countries, ...searchAliases }).map(([name, list]) => ({
+  name: normalize(name),
+  codes: list.split(' '),
+}));
+const placeNames = new Set(places.map((place) => place.name));
+/** Nome da cidade sem o código e sem o complemento: "Aruba", "Tóquio". */
+const shortNames = new Set(cities.map((city) => normalize(city.split(/ \(| – /)[0])));
+
+/**
+ * Cidades de um país digitado. A partir de quatro letras vale o começo do nome;
+ * siglas curtas, como "EUA", só quando completas.
+ */
+const citiesOfPlace = (query: string) =>
+  new Set(
+    places
+      .filter(
+        (place) =>
+          place.name === query ||
+          (query.length >= 4 &&
+            (place.name.startsWith(query) ||
+              place.name.split(' ').some((word) => word.startsWith(query)))),
+      )
+      .flatMap((place) => place.codes),
+  );
+
 /** Código de três letras de um texto como "Goiânia (GYN)". */
 export const iata = (text: string | undefined) => {
   const found = String(text ?? '').match(/\(([A-Z]{3})\)/);
@@ -317,7 +344,8 @@ export const codeFrom = (text: string) => {
     return upper;
   }
   const query = normalize(trimmed);
-  if (!query) {
+  // Nome de país não escolhe uma cidade sozinho ("Brasil" não é Brasília).
+  if (!query || (placeNames.has(query) && !shortNames.has(query))) {
     return null;
   }
   const index = cities.findIndex((city) => normalize(city).startsWith(query));
@@ -327,12 +355,16 @@ export const codeFrom = (text: string) => {
 export const cityName = (code: string) =>
   cities.find((city) => city.includes(`(${code})`)) ?? code;
 
-/** Sugestões para o campo de aeroporto, da mais para a menos parecida. */
+/**
+ * Sugestões para o campo de aeroporto, da mais para a menos parecida. Quando o
+ * texto é um país, todas as cidades dele entram na lista, depois das de nome igual.
+ */
 export const suggestCities = (text: string, limit = 8) => {
   const query = normalize(text.trim());
   if (!query) {
     return [];
   }
+  const fromPlace = citiesOfPlace(query);
   const score = (city: string) => {
     const name = normalize(city);
     const code = normalize(city.match(/\(([A-Z]{3})\)/)?.[1] ?? '');
@@ -345,13 +377,16 @@ export const suggestCities = (text: string, limit = 8) => {
     if (name.split(/[\s–\-(]+/).some((word) => word.startsWith(query))) {
       return 2;
     }
-    return name.includes(query) ? 3 : 9;
+    if (name.includes(query) && !fromPlace.size) {
+      return 3;
+    }
+    return fromPlace.has(code.toUpperCase()) ? 4 : 9;
   };
   return cities
     .map((city, index) => ({ city, index, rank: score(city) }))
     .filter((entry) => entry.rank < 9)
     .sort((a, b) => a.rank - b.rank || a.index - b.index)
-    .slice(0, limit)
+    .slice(0, fromPlace.size ? fromPlace.size + limit : limit)
     .map((entry) => entry.city);
 };
 

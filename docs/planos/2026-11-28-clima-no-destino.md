@@ -66,3 +66,10 @@ O quadro sempre diz: **"Clima típico da época, com base em anos anteriores. N�
 - Todas as cidades da busca (254) têm clima, paisagem e avisos. Entraram 25 cidades novas nos Estados Unidos, Canadá, Japão, China, Austrália e vizinhos.
 - Avisos de furacões, tufões e ciclones por região.
 - Em cidades onde o relevo distorce a média da NASA, a temperatura é corrigida pela altitude (`alt` em `climate-places.json`).
+
+## Busca por país (28/11/2026)
+
+- Os campos de cidade aceitam o nome do país, apelidos como "EUA" e as regiões "Caribe", "Lapônia" e "Escandinávia". A lista mostra o país ao lado de cada cidade.
+- Nome de país não escolhe uma cidade sozinho.
+- Cidade nova precisa entrar em `cities.ts` e em `countries.ts`.
+- Corrigido: os botões longos do Planejar viagem alargavam a tela no celular.

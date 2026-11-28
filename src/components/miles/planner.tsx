@@ -621,7 +621,7 @@ export const Planner = ({ data, today, plannerReady, initial, saved, radarAt }: 
               </Field>
               <Field>
                 <FieldLabel htmlFor="plan-destination">Destino</FieldLabel>
-                <AirportInput id="plan-destination" value={destination} onChange={setDestination} placeholder="Ex.: Roma" />
+                <AirportInput id="plan-destination" value={destination} onChange={setDestination} placeholder="Ex.: Roma ou Japão" />
               </Field>
               <Field>
                 <FieldLabel htmlFor="plan-stop">Parada no caminho (opcional)</FieldLabel>
@@ -692,6 +692,8 @@ export const Planner = ({ data, today, plannerReady, initial, saved, radarAt }: 
                   key={label}
                   type="button"
                   size="sm"
+                  // Frase longa quebra em duas linhas no celular, sem alargar a tela.
+                  className="h-auto min-h-8 max-w-full py-1.5 text-left whitespace-normal"
                   aria-pressed={value}
                   variant={value ? 'default' : 'outline'}
                   onClick={() => {

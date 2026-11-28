@@ -3,7 +3,8 @@
 import { useId, useState } from 'react';
 
 import { Input } from '@/components/ui/input';
-import { suggestCities } from '@/lib/miles/radar';
+import { countryOf } from '@/lib/miles/countries';
+import { iata, suggestCities } from '@/lib/miles/radar';
 import { cn } from '@/lib/utils';
 
 interface AirportInputProps {
@@ -84,7 +85,7 @@ export const AirportInput = ({
         >
           {options.length === 0 ? (
             <li className="text-muted-foreground px-3 py-2 text-sm">
-              Nenhum aeroporto encontrado. Digite a cidade ou o código, como POA.
+              Nenhum aeroporto encontrado. Digite a cidade, o país ou o código, como POA.
             </li>
           ) : (
             options.map((city, index) => (
@@ -93,15 +94,29 @@ export const AirportInput = ({
                 role="option"
                 aria-selected={index === active}
                 className={cn(
-                  'cursor-pointer rounded-md px-3 py-2 text-sm',
+                  'flex cursor-pointer items-baseline justify-between gap-3 rounded-md px-3 py-2 text-sm',
                   index === active && 'bg-accent',
                 )}
-                onPointerDown={(event) => {
+                // Com muitas opções, as setas do teclado precisam rolar a lista.
+                ref={
+                  index === active
+                    ? (node) => {
+                        node?.scrollIntoView({ block: 'nearest' });
+                      }
+                    : undefined
+                }
+                // Escolhe no clique, e não no toque, para dar para rolar a lista no celular.
+                onMouseDown={(event) => {
                   event.preventDefault();
+                }}
+                onClick={() => {
                   pick(city);
                 }}
               >
-                {city}
+                <span>{city}</span>
+                <span className="text-muted-foreground shrink-0 text-xs">
+                  {countryOf(iata(city))}
+                </span>
               </li>
             ))
           )}
