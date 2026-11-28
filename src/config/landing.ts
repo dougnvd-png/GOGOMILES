@@ -105,16 +105,16 @@ export const landingContent: LandingContent = {
     title: 'Encontre voos baratos em milhas de forma',
     highlight: 'simples e personalizada',
     subtitle:
-      'O GO GO MILES reúne em um só lugar as promoções de passagens em milhas que você encontra: rota, programa, cabine, datas, milhas, taxas e o link para resgatar.',
+      'O GO GO MILES reúne promoções, preços em milhas por dia e bônus de transferência, e leva você ao site da companhia para emitir.',
     primaryAction: { label: 'Começar agora', href: '/app' },
     secondaryAction: { label: 'Ver como funciona', href: '#como-funciona' },
-    note: 'Abra o painel e experimente com ofertas de exemplo.',
+    note: 'Abra o painel e veja as promoções registradas.',
   },
   highlights: [
     {
       icon: Plane,
-      title: 'Todas as ofertas juntas',
-      description: 'Guarde cada promoção com os dados que importam na emissão.',
+      title: 'Promoções em um só lugar',
+      description: 'Voos em milhas, campanhas e bônus de transferência reunidos.',
     },
     {
       icon: MonitorSmartphone,
@@ -123,49 +123,48 @@ export const landingContent: LandingContent = {
     },
     {
       icon: ShieldCheck,
-      title: 'Cada cliente vê só o seu',
-      description: 'Login individual e buscas separadas por pessoa.',
+      title: 'Sem pedir a sua senha',
+      description: 'Não guardamos o login das companhias. A compra é feita no site delas.',
     },
   ],
   benefits: {
     eyebrow: 'Benefícios',
     title: 'Menos tempo procurando, mais tempo viajando',
-    subtitle:
-      'Organize as oportunidades de voo em milhas e decida com calma qual vale a emissão.',
+    subtitle: 'Veja onde está o bom preço e decida com calma.',
     items: [
       {
-        icon: ClipboardList,
-        title: 'Cadastro direto ao ponto',
+        icon: CalendarDays,
+        title: 'Calendário de preços',
         description:
-          'Registre rota, programa, cabine, milhas e taxas em poucos segundos, com o link para resgatar.',
+          'O menor valor em milhas de cada dia de uma rota, com cores que mostram se o preço é bom.',
         visual: 'list',
       },
       {
         icon: Search,
-        title: 'Encontre rápido',
+        title: 'Busca por aeroporto e mês',
         description:
-          'Busque pela rota, filtre por programa, cabine ou situação e ordene pelas menores milhas.',
+          'Escolha de onde sai, o mês e o teto de milhas e veja os destinos que cabem.',
         visual: 'search',
       },
       {
-        icon: CalendarDays,
-        title: 'Embarques à vista',
+        icon: BellRing,
+        title: 'Destinos estrela com meta',
         description:
-          'Veja primeiro as viagens com data mais próxima e receba aviso quando o embarque se aproxima.',
+          'Marque para onde quer ir e veja quando o preço chega no valor que você definiu.',
         visual: 'alert',
       },
       {
-        icon: BellRing,
-        title: 'Acompanhe cada oferta',
+        icon: ClipboardList,
+        title: 'Radar de bônus',
         description:
-          'Marque como nova, em análise ou emitida e veja o que já virou passagem.',
+          'Acompanhe as transferências bonificadas, o prazo de cada uma e quando vale transferir.',
         visual: 'chart',
       },
       {
         icon: Users,
-        title: 'Cada um com o seu acesso',
+        title: 'A sua carteira',
         description:
-          'Cada cliente entra com a própria conta e vê apenas as suas buscas e informações.',
+          'Informe os seus saldos à mão e use o simulador para saber se compensa usar milhas.',
         visual: 'access',
       },
       {
@@ -178,22 +177,20 @@ export const landingContent: LandingContent = {
   },
   steps: {
     eyebrow: 'Como funciona',
-    title: 'Três passos até a emissão',
-    subtitle: 'Do primeiro acesso à passagem emitida.',
+    title: 'Três passos até a sua viagem',
+    subtitle: 'Do primeiro acesso à escolha do voo.',
     items: [
       {
-        title: 'Crie a sua conta',
-        description: 'Entre com o seu e-mail e acesse o seu painel.',
+        title: 'Diga para onde quer ir',
+        description: 'Marque destinos estrela, rotas e a meta de milhas.',
       },
       {
-        title: 'Cadastre as ofertas',
-        description:
-          'Guarde os voos em promoção com programa, cabine, milhas, taxas e datas.',
+        title: 'Acompanhe os preços',
+        description: 'Veja o calendário, as promoções e os bônus de transferência.',
       },
       {
-        title: 'Compare e emita',
-        description:
-          'Veja quais valem mais a pena, abra o link do programa e marque como emitida.',
+        title: 'Emita no site oficial',
+        description: 'Abra o link da companhia, confira o preço e conclua a compra lá.',
       },
     ],
   },
@@ -216,17 +213,16 @@ export const landingContent: LandingContent = {
       {
         question: 'O GO GO MILES emite a passagem para mim?',
         answer:
-          'Não. Ele organiza as ofertas e leva você ao site do programa de milhas, onde a emissão é feita.',
+          'Não. Ele mostra as oportunidades e leva você ao site da companhia, onde a emissão é feita.',
       },
       {
-        question: 'As ofertas aparecem sozinhas?',
+        question: 'Os preços são em tempo real?',
         answer:
-          'Nesta primeira versão, você cadastra as ofertas que encontra. A busca automática em fontes autorizadas é um próximo passo.',
+          'Não. Cada tela mostra a data e a hora da última atualização. O preço em milhas muda a qualquer momento, então confirme no site antes de transferir pontos.',
       },
       {
-        question: 'Outras pessoas veem as minhas buscas?',
-        answer:
-          'Não. Cada conta acessa somente os próprios dados, buscas e informações.',
+        question: 'Preciso informar a senha das companhias?',
+        answer: 'Não. O sistema não pede nem guarda o seu login nos programas de milhas.',
       },
       {
         question: 'Preciso instalar alguma coisa?',
@@ -237,7 +233,7 @@ export const landingContent: LandingContent = {
   },
   finalCall: {
     title: 'Pronto para encontrar o seu próximo voo?',
-    subtitle: 'Crie a sua conta e cadastre a primeira oferta em poucos minutos.',
+    subtitle: 'Abra o painel e veja as promoções de passagens em milhas.',
     action: { label: 'Entrar no painel', href: '/app' },
   },
 };

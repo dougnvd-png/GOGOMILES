@@ -15,7 +15,7 @@ export const PlatformHeader = () => (
     />
     <SidebarTrigger aria-label="Abrir ou fechar o menu" className="-ml-1.5" />
     <form
-      action="/app/ofertas"
+      action="/app/calendario"
       role="search"
       className="relative ml-1 hidden w-full max-w-xs sm:block"
     >
@@ -25,10 +25,10 @@ export const PlatformHeader = () => (
       />
       <Input
         type="search"
-        name="busca"
+        name="destino"
         maxLength={80}
-        placeholder="Buscar rota"
-        aria-label="Buscar oferta pela rota"
+        placeholder="Buscar destino no calendário"
+        aria-label="Buscar destino no calendário"
         className="h-9 rounded-full pl-9"
       />
     </form>

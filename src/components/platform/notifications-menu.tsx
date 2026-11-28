@@ -7,20 +7,36 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { describeDeadline, upcomingDeadlines } from '@/lib/insights';
-import { offerRoute } from '@/lib/offers';
+import { getRadarLive, todayKey } from '@/data/radar';
+import { formatNumber } from '@/lib/format';
+import { describeEnd, openPromos, starStatuses } from '@/lib/miles/home';
 import { cn } from '@/lib/utils';
-import { listOffers } from '@/server/queries/offers';
+import { getUserData } from '@/server/queries/user-docs';
 
-const warningWindowDays = 3;
 const visibleLimit = 5;
 
-/** Avisos do cabeçalho: ofertas em aberto com embarque próximo ou data já passada. */
+/** Avisos do cabeçalho: destinos estrela na meta e bônus que acabam hoje ou amanhã. */
 export const NotificationsMenu = async () => {
-  const offers = await listOffers();
-  const alerts = upcomingDeadlines(offers, new Date(), offers.length).filter(
-    ({ daysLeft }) => daysLeft <= warningWindowDays,
-  );
+  const [radar, user] = await Promise.all([getRadarLive(), getUserData()]);
+  const today = todayKey();
+  const alerts = [
+    ...starStatuses(radar, user.estrelas, today)
+      .filter((entry) => entry.withinGoal && entry.best)
+      .map((entry) => ({
+        id: `star-${entry.star.key}`,
+        title: `${entry.star.nome} na meta`,
+        detail: `${formatNumber(entry.best?.price.milhas ?? 0)} milhas saindo de ${entry.best?.origin}`,
+        urgent: false,
+      })),
+    ...openPromos(radar, today)
+      .filter((entry) => entry.daysLeft !== null && entry.daysLeft <= 1)
+      .map((entry) => ({
+        id: entry.promo.id,
+        title: `${entry.promo.de} → ${entry.promo.para}`,
+        detail: `Até ${entry.promo.bonusMax ?? '?'}% de bônus, ${describeEnd(entry.daysLeft)}`,
+        urgent: (entry.daysLeft ?? 1) <= 0,
+      })),
+  ];
   const visible = alerts.slice(0, visibleLimit);
 
   return (
@@ -32,8 +48,8 @@ export const NotificationsMenu = async () => {
           className="relative"
           aria-label={
             alerts.length > 0
-              ? `Avisos: ${alerts.length} ${alerts.length === 1 ? "embarque pede" : "embarques pedem"} atenção`
-              : 'Avisos: nenhum embarque próximo'
+              ? `Avisos: ${alerts.length} ${alerts.length === 1 ? 'item pede' : 'itens pedem'} atenção`
+              : 'Avisos: nada urgente'
           }
         >
           <Bell />
@@ -49,34 +65,27 @@ export const NotificationsMenu = async () => {
         <div className="border-b px-4 py-3">
           <p className="text-sm font-semibold">Avisos</p>
           <p className="text-muted-foreground text-xs">
-            Embarques que já passaram ou que acontecem em até {warningWindowDays} dias.
+            Destinos estrela na meta e bônus que acabam hoje ou amanhã.
           </p>
         </div>
         {visible.length === 0 ? (
           <p className="text-muted-foreground px-4 py-6 text-center text-sm">
-            Nenhum embarque próximo. Tudo em dia.
+            Nada urgente no momento.
           </p>
         ) : (
           <ul className="grid gap-0.5 p-2">
-            {visible.map(({ offer, daysLeft }) => (
-              <li
-                key={offer.id}
-                className="flex offers-start gap-3 rounded-lg px-2 py-2"
-              >
+            {visible.map((alert) => (
+              <li key={alert.id} className="flex items-start gap-3 rounded-lg px-2 py-2">
                 <span
                   aria-hidden
                   className={cn(
                     'mt-1.5 size-2 shrink-0 rounded-full',
-                    daysLeft < 0 ? 'bg-destructive' : 'bg-warning',
+                    alert.urgent ? 'bg-destructive' : 'bg-warning',
                   )}
                 />
                 <span className="grid min-w-0 gap-0.5">
-                  <span className="truncate text-sm font-medium">
-                    {offerRoute(offer)}
-                  </span>
-                  <span className="text-muted-foreground text-xs">
-                    {describeDeadline(daysLeft)}
-                  </span>
+                  <span className="truncate text-sm font-medium">{alert.title}</span>
+                  <span className="text-muted-foreground text-xs">{alert.detail}</span>
                 </span>
               </li>
             ))}
@@ -84,10 +93,10 @@ export const NotificationsMenu = async () => {
         )}
         <div className="border-t p-2">
           <Button asChild variant="ghost" size="sm" className="w-full">
-            <Link href="/app/ofertas">
+            <Link href="/app">
               {alerts.length > visible.length
-                ? `Ver os ${alerts.length} na lista de ofertas`
-                : 'Abrir a lista de ofertas'}
+                ? `Ver os ${alerts.length} na visão geral`
+                : 'Abrir a visão geral'}
             </Link>
           </Button>
         </div>

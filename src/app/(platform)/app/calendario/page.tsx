@@ -27,10 +27,11 @@ export default async function CalendarPage({
         updatedAt={<LastUpdated entries={[{ label: 'Radar de promoções e alertas', at: radar.meta.ultimaVarredura }, { label: 'Busca ao vivo nos sites', at: radar.meta.aoVivo }]} />}
       />
       <CalendarView
+        key={`${text(origem)}-${text(destino)}`}
         data={toPriceData(radar)}
         today={todayKey()}
         watches={user.vigias}
-        initialFrom={text(origem)}
+        initialFrom={text(origem) || (text(destino) ? 'Goiânia (GYN)' : '')}
         initialTo={text(destino)}
       />
     </>

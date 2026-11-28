@@ -9,7 +9,6 @@ import {
   OctagonMinus,
   Plane,
   Settings,
-  Ticket,
   TrendingUp,
   Wallet,
   type LucideIcon,
@@ -34,7 +33,6 @@ export const mainNavigation: NavigationItem[] = [
   { title: 'Stopover', href: '/app/stopover', icon: OctagonMinus },
   { title: 'Guias e manual', href: '/app/guias', icon: BookOpen },
   { title: 'Simulador', href: '/app/simulador', icon: Calculator },
-  { title: 'Minhas ofertas', href: '/app/ofertas', icon: Ticket },
   { title: 'Minha carteira', href: '/app/carteira', icon: Wallet },
 ];
 
