@@ -16,7 +16,8 @@
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",
     "radar:importar": "node --env-file=.env.local scripts/radar.mjs importar",
-    "radar:atualizar": "node --env-file=.env.local scripts/radar.mjs atualizar"
+    "radar:atualizar": "node --env-file=.env.local scripts/radar.mjs atualizar",
+    "clima:baixar": "node scripts/climate.mjs"
   },
   "dependencies": {
     "@clerk/localizations": "4.26.1",

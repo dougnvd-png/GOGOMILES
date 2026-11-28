@@ -210,6 +210,13 @@ Campos dentro de `FieldGroup` e `Field`, com `FieldLabel` em todo campo e `Field
 - Carregando: `loading.tsx` com `Skeleton` no formato do conteúdo que vai chegar.
 - Erro: `error.tsx` com uma mensagem simples e o botão "Tentar de novo".
 
+### Clima no destino
+
+`DestinationClimate` (`src/components/miles/destination-climate.tsx`) mostra o clima típico do destino no mês da viagem, no Calendário e no Planejar viagem. Neve e praia trocam o fundo da tela por uma paisagem desenhada em `climate-scene.tsx`, com as cores nas variáveis `--scene-*` de `globals.css`. É a única animação em ciclo da área logada: poucos flocos, atrás do conteúdo, parados para quem pede menos movimento e com botão para desligar.
+
+- O texto sempre diz que é clima típico, não previsão.
+- Dados em `src/data/climate.json` (`npm run clima:baixar`). Destinos e temporadas em `src/data/climate-places.json`.
+
 ### Página inicial
 
 Seções em `src/components/marketing`, todas alimentadas por `src/config/landing.ts`: cabeçalho flutuante, chamada principal com a prévia do painel, faixa de destaques, benefícios em grade, três passos, planos e depoimentos (aparecem só quando há conteúdo), perguntas, chamada final e rodapé. Cada seção começa com `SectionHeading` (rótulo, título e subtítulo).

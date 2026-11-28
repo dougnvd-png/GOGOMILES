@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 
 import { AirportInput } from '@/components/miles/airport-input';
 import { AirlineBadge, ExternalLink, LightDot, Plan, Tag, lightTextClass } from '@/components/miles/bits';
+import { DestinationClimate } from '@/components/miles/destination-climate';
 import { PriceGrid, type GridCell } from '@/components/miles/price-grid';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -189,6 +190,8 @@ export const CalendarView = ({ data, today, watches, initialFrom = '', initialTo
           </div>
         </CardContent>
       </Card>
+
+      <DestinationClimate code={d || null} month={Number((selected ?? month).slice(5, 7))} />
 
       {!o || !d ? (
         <Card>

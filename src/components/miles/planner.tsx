@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 
 import { AirportInput } from '@/components/miles/airport-input';
 import { AirlineBadge, AirlineBadges, ExternalLink, LightDot, Plan, Tag } from '@/components/miles/bits';
+import { DestinationClimate } from '@/components/miles/destination-climate';
 import { LastUpdated } from '@/components/miles/last-updated';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -31,6 +32,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { formatNumber } from '@/lib/format';
+import { monthFromText } from '@/lib/miles/climate';
 import {
   planCabins,
   type PlanRequest,
@@ -713,6 +715,10 @@ export const Planner = ({ data, today, plannerReady, initial, saved, radarAt }: 
           </form>
         </CardContent>
       </Card>
+      <DestinationClimate
+        code={destination.trim().length >= 3 ? codeFrom(destination) : null}
+        month={monthFromText(depart)}
+      />
       {isPending && (
         <Card aria-live="polite">
           <CardContent className="text-brand-ink py-6">
