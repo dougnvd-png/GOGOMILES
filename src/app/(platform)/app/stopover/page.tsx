@@ -15,8 +15,8 @@ import { getRadar } from '@/data/radar';
 
 export const metadata: Metadata = { title: 'Stopover' };
 
-export default function StopoverPage() {
-  const radar = getRadar();
+export default async function StopoverPage() {
+  const radar = await getRadar();
   const stops = [...radar.stopovers].sort(
     (a, b) => (a.ordem ?? 0) - (b.ordem ?? 0),
   );

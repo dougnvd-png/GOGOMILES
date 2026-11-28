@@ -19,8 +19,8 @@ import { latestOf } from '@/lib/miles/radar';
 
 export const metadata: Metadata = { title: 'Oportunidades' };
 
-export default function OpportunitiesPage() {
-  const radar = getRadar();
+export default async function OpportunitiesPage() {
+  const radar = await getRadar();
   const list = [...radar.oportunidades].sort((a, b) =>
     String(b.encontrado ?? '').localeCompare(String(a.encontrado ?? '')),
   );

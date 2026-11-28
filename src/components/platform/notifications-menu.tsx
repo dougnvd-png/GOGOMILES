@@ -7,7 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { getRadarLive, todayKey } from '@/data/radar';
+import { getRadar, todayKey } from '@/data/radar';
 import { formatNumber } from '@/lib/format';
 import { describeEnd, openPromos, starStatuses } from '@/lib/miles/home';
 import { cn } from '@/lib/utils';
@@ -17,7 +17,7 @@ const visibleLimit = 5;
 
 /** Avisos do cabeçalho: destinos estrela na meta e bônus que acabam hoje ou amanhã. */
 export const NotificationsMenu = async () => {
-  const [radar, user] = await Promise.all([getRadarLive(), getUserData()]);
+  const [radar, user] = await Promise.all([getRadar(), getUserData()]);
   const today = todayKey();
   const alerts = [
     ...starStatuses(radar, user.estrelas, today)

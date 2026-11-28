@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 import { HomeView } from '@/components/miles/home-view';
-import { getRadarLive, todayKey } from '@/data/radar';
+import { getRadar, todayKey } from '@/data/radar';
 import {
   cheapestFrom,
   homeOrigins,
@@ -17,7 +17,7 @@ export const metadata: Metadata = { title: 'Visão geral' };
 
 export default async function OverviewPage() {
   const [radar, user, viewer] = await Promise.all([
-    getRadarLive(),
+    getRadar(),
     getUserData(),
     getViewer(),
   ]);

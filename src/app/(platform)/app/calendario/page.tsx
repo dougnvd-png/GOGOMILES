@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { CalendarView } from '@/components/miles/calendar-view';
 import { LastUpdated } from '@/components/miles/last-updated';
 import { PageHeader } from '@/components/platform/page-header';
-import { getRadarLive, todayKey } from '@/data/radar';
+import { getRadar, todayKey } from '@/data/radar';
 import { toPriceData } from '@/lib/miles/radar';
 import { getUserData } from '@/server/queries/user-docs';
 
@@ -15,7 +15,7 @@ export default async function CalendarPage({
   searchParams,
 }: PageProps<'/app/calendario'>) {
   const [{ origem, destino }, user] = await Promise.all([searchParams, getUserData()]);
-  const radar = await getRadarLive();
+  const radar = await getRadar();
   const text = (value: string | string[] | undefined) =>
     typeof value === 'string' ? value.trim().slice(0, maxLength) : '';
   return (

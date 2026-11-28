@@ -14,8 +14,8 @@ export const metadata: Metadata = { title: 'Guias e manual' };
 const tagTone = (tag: string | undefined) =>
   tag === 'MITO' ? 'bad' : tag === 'EVITE' ? 'warn' : 'ok';
 
-export default function GuidesPage() {
-  const radar = getRadar();
+export default async function GuidesPage() {
+  const radar = await getRadar();
   const tips = [...radar.dicas].sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
   return (
     <>

@@ -14,7 +14,9 @@
     "check": "npm run lint && npm run typecheck",
     "db:push": "drizzle-kit push",
     "db:generate": "drizzle-kit generate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "radar:importar": "node --env-file=.env.local scripts/radar.mjs importar",
+    "radar:atualizar": "node --env-file=.env.local scripts/radar.mjs atualizar"
   },
   "dependencies": {
     "@clerk/nextjs": "7.10.5",

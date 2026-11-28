@@ -38,8 +38,8 @@ const verdictTone = (verdict: string | undefined, active: boolean) => {
   return verdict === 'fraco' ? ('bad' as const) : ('warn' as const);
 };
 
-export default function RadarPage() {
-  const radar = getRadar();
+export default async function RadarPage() {
+  const radar = await getRadar();
   const today = todayKey();
   const promos = [...radar.promos].sort(
     (a, b) =>

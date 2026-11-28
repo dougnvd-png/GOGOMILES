@@ -5,6 +5,7 @@ import {
   jsonb,
   pgEnum,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   uniqueIndex,
@@ -89,4 +90,20 @@ export const priceChecks = pgTable(
   (table) => [
     index('price_checks_route_idx').on(table.origin, table.destination),
   ],
+).enableRLS();
+
+// O radar (promoções, campanhas, bônus, guias, histórico importado). Dados
+// compartilhados por todos, gravados só pelo comando scripts/radar.mjs. Cada
+// linha é um item de uma coleção; o formato está em src/lib/miles/radar.ts.
+export const radarItems = pgTable(
+  'radar_items',
+  {
+    collection: text('collection').notNull(),
+    itemId: text('item_id').notNull(),
+    data: jsonb('data').notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.collection, table.itemId] })],
 ).enableRLS();

@@ -11,6 +11,9 @@ import { Testimonials } from '@/components/marketing/testimonials';
 import { Ticker } from '@/components/marketing/ticker';
 import { MotionObserver } from '@/components/motion/motion-observer';
 
+// A página inicial é refeita a cada 5 minutos para acompanhar o radar.
+export const revalidate = 300;
+
 export default function LandingPage() {
   return (
     <>

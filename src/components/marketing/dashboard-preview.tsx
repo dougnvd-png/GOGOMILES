@@ -33,8 +33,8 @@ const shortCity = (code: string) => cityName(code).replace(/ \([A-Z]{3}\)$/, '')
  * Prévia do painel na página inicial, com os dados do radar na data da última
  * varredura. Usa os mesmos componentes da área logada.
  */
-export const DashboardPreview = () => {
-  const radar = getRadar();
+export const DashboardPreview = async () => {
+  const radar = await getRadar();
   const day = (radar.meta.ultimaVarredura ?? new Date().toISOString()).slice(0, 10);
   const cheapest = cheapestFrom(radar, homeOrigins, day, 4);
   const promos = openPromos(radar, day);
