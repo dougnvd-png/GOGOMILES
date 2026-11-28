@@ -25,7 +25,19 @@ const monthly = (values, code, name) =>
     return Math.round(value * 10) / 10;
   });
 
-const download = async (code) => {
+const download = async (code, attempt = 1) => {
+  try {
+    return await request(code);
+  } catch (error) {
+    if (attempt >= 4) {
+      throw error;
+    }
+    await new Promise((resolve) => setTimeout(resolve, attempt * 5_000));
+    return download(code, attempt + 1);
+  }
+};
+
+const request = async (code) => {
   const { lat, lon } = places[code];
   const url = new URL('https://power.larc.nasa.gov/api/temporal/climatology/point');
   url.search = new URLSearchParams({
@@ -41,10 +53,18 @@ const download = async (code) => {
   }
   const body = await response.json();
   const { T2M, PRECTOTCORR } = body.properties?.parameter ?? {};
+  // A NASA calcula a média de um quadrado com cerca de 50 km. Em cidades onde o
+  // relevo engana, `alt` (altitude em metros) corrige 6,5 °C a cada mil metros.
+  const gridAltitude = body.geometry?.coordinates?.[2] ?? 0;
+  const { alt } = places[code];
+  const correction = typeof alt === 'number' ? ((gridAltitude - alt) * 6.5) / 1000 : 0;
   return {
     period: body.header?.range ?? '',
+    gridAltitude,
     data: {
-      temperature: monthly(T2M, code, 'temperatura'),
+      temperature: monthly(T2M, code, 'temperatura').map(
+        (value) => Math.round((value + correction) * 10) / 10,
+      ),
       rain: monthly(PRECTOTCORR, code, 'chuva'),
     },
   };
@@ -55,10 +75,13 @@ const result = {};
 let period = '';
 for (let start = 0; start < codes.length; start += together) {
   const group = codes.slice(start, start + together);
-  const answers = await Promise.all(group.map(download));
+  const answers = await Promise.all(group.map((code) => download(code)));
   group.forEach((code, index) => {
     result[code] = answers[index].data;
     period ||= answers[index].period;
+    if (process.argv.includes('--altitudes')) {
+      console.log(`${code} altitude do quadrado: ${Math.round(answers[index].gridAltitude)} m`);
+    }
   });
   console.log(`${Math.min(start + together, codes.length)} de ${codes.length} destinos`);
 }

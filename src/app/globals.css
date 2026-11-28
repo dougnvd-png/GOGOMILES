@@ -1173,7 +1173,8 @@ body::before {
     --scene-sky: var(--scene-snow-sky);
     --scene-horizon: var(--scene-snow-horizon);
 
-    .climate-ground {
+    .climate-ground,
+    .climate-park {
       fill: var(--scene-snow);
     }
   }

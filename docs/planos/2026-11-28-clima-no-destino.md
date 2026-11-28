@@ -60,3 +60,9 @@ O quadro sempre diz: **"Clima típico da época, com base em anos anteriores. N�
 - Aviso do planejador trocado por um texto sem termo técnico.
 - Aurora boreal: cortinas de luz e estrelas nos destinos do extremo norte (Lapônia, Noruega, Suécia, Finlândia, Islândia, Canadá e Alasca), na temporada de noites escuras. Aviso de que não há garantia.
 - Novos destinos: Ivalo, Kiruna, Tromsø, Reykjavík, Yellowknife, Whitehorse e Fairbanks.
+
+## Cobertura mundial (28/11/2026)
+
+- Todas as cidades da busca (254) têm clima, paisagem e avisos. Entraram 25 cidades novas nos Estados Unidos, Canadá, Japão, China, Austrália e vizinhos.
+- Avisos de furacões, tufões e ciclones por região.
+- Em cidades onde o relevo distorce a média da NASA, a temperatura é corrigida pela altitude (`alt` em `climate-places.json`).

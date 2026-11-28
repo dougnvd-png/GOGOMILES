@@ -15,7 +15,8 @@ interface Place {
   snow?: number[];
   snowNote?: string;
   maySnow?: number[];
-  hurricane?: boolean;
+  /** Região com temporada de tempestades; veja `storms`. */
+  storm?: string;
   /** Meses de noites escuras em que a aurora boreal pode aparecer. */
   aurora?: number[];
 }
@@ -44,8 +45,13 @@ const averages: Record<string, { temperature: number[]; rain: number[] }> = clim
 
 const heavyRain = 5;
 const someRain = 2.5;
-/** Temporada de furacões do Atlântico: junho a novembro. */
-const hurricaneMonths = [6, 7, 8, 9, 10, 11];
+/** Temporadas de tempestades tropicais por região. */
+const storms: Record<string, { text: string; months: number[] }> = {
+  atlantic: { text: 'Temporada de furacões', months: [6, 7, 8, 9, 10, 11] },
+  pacific: { text: 'Temporada de furacões', months: [6, 7, 8, 9, 10] },
+  typhoon: { text: 'Temporada de tufões', months: [7, 8, 9, 10] },
+  south: { text: 'Temporada de ciclones', months: [11, 12, 1, 2, 3, 4] },
+};
 
 export const monthNames = [
   'janeiro',
@@ -146,17 +152,19 @@ export const weatherFor = (code: string, month: number): DestinationWeather | nu
   if (!snowing && level === 'alta') {
     notes.push({ tone: 'warn', text: 'Período chuvoso' });
   }
-  if (place.hurricane && hurricaneMonths.includes(month)) {
-    notes.push({ tone: 'bad', text: 'Temporada de furacões' });
+  const storm = place.storm ? storms[place.storm] : undefined;
+  if (storm?.months.includes(month)) {
+    notes.push({ tone: 'bad', text: storm.text });
   }
 
   const byRain: Record<RainLevel, Sky> = { alta: 'rain', 'média': 'clouds', baixa: 'sun' };
   // Onde pode nevar, a época é fria: céu fechado mesmo com pouca chuva.
   const cold = (place.maySnow?.includes(month) ?? false) && level !== 'alta';
-  const land: Land = beach ? 'beach' : place.kind === 'neve' ? 'mountains' : 'city';
+  const mountains = place.kind === 'neve' || place.kind === 'montanha';
+  const land: Land = beach ? 'beach' : mountains ? 'mountains' : 'city';
   return {
     sky: snowing ? 'snow' : cold ? 'clouds' : byRain[level],
-    land: snowing ? 'mountains' : land,
+    land,
     aurora,
     temperature,
     rain,
